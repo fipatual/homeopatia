@@ -360,15 +360,55 @@
   /* ═══════════════ HISTÓRIA ═══════════════ */
   const history = {};
   const hp = (b, seed, lbl) => plate(340, 230, b, seed, lbl);
-  history.hipocrates = () => hp(`<g filter="url(#pencil)">
-    <path d="M170 62 V198" class="ink" stroke-width="3"/><path d="M150 200 h40 l-6 -12 h-28z" fill="${P('ochre')}" class="ink"/>
-    <path d="M70 80 L270 80" class="ink" stroke-width="3"/><circle cx="170" cy="74" r="7" fill="${P('gold')}" class="ink"/>
-    <path d="M80 80 L60 140 M80 80 L100 140 M260 80 L240 140 M260 80 L280 140" class="ink thin"/>
-    <path d="M50 140 h60 a30 12 0 0 1 -60 0" fill="${P('gold')}" class="ink"/><path d="M230 140 h60 a30 12 0 0 1 -60 0" fill="${P('gold')}" class="ink"/>
-    <path d="M66 136 c-6 -14 4 -20 6 -32 c8 10 12 18 8 32z" fill="${P('orange')}" class="ink"/>
-    <g transform="translate(94 120)">${[0, 60, 120].map(a => `<path d="M0 -12 V12 M-4 -9 L0 -5 L4 -9 M-4 9 L0 5 L4 9" transform="rotate(${a})" stroke="${PAL.blue}" stroke-width="1.6" fill="none"/>`).join('')}</g>
-    <path d="M244 136 c-6 -14 4 -20 6 -32 c8 10 12 18 8 32z M268 136 c-6 -14 4 -20 6 -32 c8 10 12 18 8 32z" fill="${P('orange')}" class="ink"/></g>
-    <text x="80" y="176" text-anchor="middle" class="lbl">contrários</text><text x="260" y="176" text-anchor="middle" class="lbl">semelhantes</text>`, 101, 'Balança: contrários e semelhantes');
+  /* Hipócrates: balança clássica em estilo de gravura (traço limpo, hachuras, sem tremido de lápis) */
+  history.hipocrates = () => {
+    const flame = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})">
+      <path d="M0 0 C-10 0 -11 -12 -6 -20 C-4 -24 -5 -28 -3 -32 C0 -26 4 -26 3 -35 C9 -28 12 -18 9 -8 C8 -3 5 0 0 0Z" fill="${P('orange')}" class="ink thin"/>
+      <path d="M0 -2 C-5 -2 -5 -9 -2 -14 C-1 -11 1 -11 1 -17 C4 -12 5 -7 3 -3 C2 -2 1 -2 0 -2Z" fill="${PAL.yellow}" opacity=".85"/></g>`;
+    const crystal = (x, y, r) => `<g transform="translate(${x} ${y})" stroke="${PAL.blue}" stroke-linecap="round" fill="none">
+      ${[0, 60, 120, 180, 240, 300].map(a => `<g transform="rotate(${a})"><path d="M0 0 V${-r}" stroke-width="1.3"/>
+        <path d="M0 ${-r * .45} l${-r * .28} ${-r * .2} M0 ${-r * .45} l${r * .28} ${-r * .2} M0 ${-r * .72} l${-r * .2} ${-r * .14} M0 ${-r * .72} l${r * .2} ${-r * .14}" stroke-width=".8"/></g>`).join('')}
+      <circle r="${r * .16}" stroke-width=".8" fill="${PAL.sky}"/></g>`;
+    const chain = (x1, y1, x2, y2, o = 1) => `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${INK}" stroke-width="1.5" stroke-dasharray="2.6 1.3" opacity="${o}" fill="none"/>`;
+    const pan = cx => `${chain(cx, 76, cx, 138, .45)}${chain(cx, 76, cx - 29, 142)}${chain(cx, 76, cx + 29, 142)}
+      <path d="M${cx - 30} 142 Q${cx - 28} 161 ${cx} 161 Q${cx + 28} 161 ${cx + 30} 142Z" fill="${P('gold')}" class="ink"/>
+      <path d="M${cx - 30} 142 Q${cx - 28} 161 ${cx} 161 Q${cx + 28} 161 ${cx + 30} 142Z" fill="url(#p-shade)"/>
+      <path d="M${cx - 26} 147 Q${cx - 18} 157 ${cx - 2} 158" class="ink thin" stroke="${PAL.white}" opacity=".7"/>
+      <ellipse cx="${cx}" cy="142" rx="30" ry="4.5" fill="${P('ochre')}" class="ink"/>`;
+    let key = '';
+    for (let x = 136; x < 202; x += 9) key += `M${x} 208 v-6 h6 v4 h-3 v-2 `;
+    return hp(`
+    <ellipse cx="170" cy="212" rx="58" ry="3" fill="url(#p-shade)"/>
+    <!-- pedestal e coluna -->
+    <rect x="132" y="200" width="76" height="10" fill="${P('cream')}" class="ink"/><rect x="194" y="200" width="14" height="10" fill="url(#p-shade)"/>
+    <path d="${key}" class="ink thin" opacity=".75"/>
+    <rect x="146" y="194" width="48" height="6" fill="${P('cream')}" class="ink"/>
+    <rect x="157" y="189" width="26" height="5" rx="2.5" fill="${P('cream')}" class="ink"/>
+    <rect x="162" y="86" width="16" height="103" fill="${P('cream')}" class="ink"/><rect x="173" y="86" width="5" height="103" fill="url(#p-shade)"/>
+    <path d="M165.2 88 V187 M168.4 88 V187 M171.6 88 V187 M174.8 88 V187" class="ink thin" opacity=".55"/>
+    <rect x="160" y="83" width="20" height="3" fill="${P('cream')}" class="ink thin"/>
+    <path d="M155 80 Q170 86 185 80" fill="${P('cream')}" class="ink thin"/>
+    <path d="M158 84 m-3 0 a3 3 0 1 1 3 3 a1.6 1.6 0 1 1 -1.6 -1.6 M182 84 m3 0 a3 3 0 1 0 -3 3 a1.6 1.6 0 1 0 1.6 -1.6" class="ink thin"/>
+    <rect x="153" y="76" width="34" height="4" fill="${P('cream')}" class="ink"/>
+    <path d="M165 76 L170 69 L175 76Z" fill="${P('ochre')}" class="ink thin"/>
+    <!-- fiel e escala -->
+    <path d="M163.2 47.2 A20 20 0 0 1 176.8 47.2" class="ink thin"/>
+    ${[-110, -100, -90, -80, -70].map(a => { const r = Math.PI * a / 180; return `<path d="M${170 + 20 * Math.cos(r)} ${66 + 20 * Math.sin(r)} L${170 + 23 * Math.cos(r)} ${66 + 23 * Math.sin(r)}" class="ink thin"/>`; }).join('')}
+    <path d="M170 62 L168.8 58 L170 47 L171.2 58Z" fill="${INK}"/>
+    <!-- travessão -->
+    <path d="M72 64.6 Q170 60 268 64.6 L268 67.4 Q170 72 72 67.4Z" fill="${P('gold')}" class="ink"/>
+    <circle cx="170" cy="66" r="5.5" fill="${P('gold')}" class="ink"/><circle cx="170" cy="66" r="1.6" fill="${INK}"/>
+    <circle cx="72" cy="66" r="3" fill="${P('gold')}" class="ink thin"/><circle cx="268" cy="66" r="3" fill="${P('gold')}" class="ink thin"/>
+    <path d="M72 69 V73.5 M268 69 V73.5" class="ink thin"/><circle cx="72" cy="75" r="1.8" class="ink thin" fill="none"/><circle cx="268" cy="75" r="1.8" class="ink thin" fill="none"/>
+    <!-- pratos -->
+    ${pan(72)}${pan(268)}
+    ${flame(60, 141, .95)}${crystal(87, 125, 13)}
+    ${flame(255, 141, .9)}${flame(281, 141, .9)}
+    <text x="72" y="182" text-anchor="middle" class="lbl">contraria contrariis</text>
+    <text x="72" y="196" text-anchor="middle" class="lbl s">cura pelos contrários</text>
+    <text x="268" y="182" text-anchor="middle" class="lbl">similia similibus</text>
+    <text x="268" y="196" text-anchor="middle" class="lbl s">cura pelos semelhantes</text>`, 101, 'Balança clássica em equilíbrio: à esquerda fogo e gelo (cura pelos contrários), à direita fogo e fogo (cura pelos semelhantes)');
+  };
   history.paracelso = () => hp(`<g filter="url(#pencil)">
     <ellipse cx="100" cy="125" rx="58" ry="50" fill="${P('ochre')}" class="ink"/>
     <path d="M100 78 V172" class="ink"/><path d="M60 110 c10 -14 26 0 34 -14 M58 136 c14 -10 24 6 36 -4 M106 98 c10 10 24 -4 36 8 M106 126 c12 -10 24 6 36 -2 M70 156 c10 -6 18 6 26 0 M106 152 c10 6 22 -6 32 2" class="ink thin"/>
