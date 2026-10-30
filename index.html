@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homeopatia — um gabinete de curiosidades</title>
+<meta name="description" content="Aprenda sobre homeopatia de um jeito ilustrado: consulta interativa, linha do tempo de 2.400 anos e o que a ciência diz.">
+<meta property="og:title" content="Homeopatia — um gabinete de curiosidades">
+<meta property="og:description" content="Consulta interativa, história ilustrada e ciência explicada com lápis de cor.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M24 6h16v10c10 5 14 14 14 24a22 22 0 0 1-44 0c0-10 4-19 14-24z' fill='%23f3e3bd' stroke='%233a2a1e' stroke-width='3'/%3E%3Ccircle cx='32' cy='42' r='8' fill='%237d55a3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-era="hahnemann">
+<a class="skip" href="#main">Pular para o conteúdo</a>
+
+<header class="top">
+  <div class="title-wrap">
+    <svg class="title-script" viewBox="0 0 260 30" aria-hidden="true"></svg>
+    <h1>Homeopatia</h1>
+    <p class="tag">um gabinete de curiosidades sobre uma medicina de 230 anos</p>
+  </div>
+  <nav class="tabs" aria-label="Seções">
+    <a href="#consulta" data-tab="consulta">Consulta</a>
+    <a href="#historia" data-tab="historia">História</a>
+    <a href="#ciencia" data-tab="ciencia">Ciência</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ═════════════ CONSULTA ═════════════ -->
+<section id="consulta" class="tab-panel" aria-labelledby="h-consulta">
+  <div class="wrap">
+    <div class="intro">
+      <h2 id="h-consulta">O que você está sentindo?</h2>
+      <p>Descreva com suas palavras, ou escolha um exemplo. Vamos mostrar <em>o que acontece no seu corpo</em>, como um homeopata pensaria o caso — e o que a ciência diz sobre isso.</p>
+    </div>
+
+    <form id="ask" class="ask" autocomplete="off">
+      <label for="q" class="sr">Seus sintomas</label>
+      <textarea id="q" rows="3" placeholder="Ex.: acordo toda madrugada e não consigo voltar a dormir…"></textarea>
+      <button type="submit" class="btn">Pedir orientação <span aria-hidden="true">✦</span></button>
+    </form>
+
+    <div class="chips" id="chips" role="list" aria-label="Exemplos de queixas"></div>
+
+    <div id="stage" class="stage" hidden>
+      <figure class="plate-fig" id="plateFig"></figure>
+    </div>
+    <div id="result" class="result" aria-live="polite"></div>
+
+    <p class="disclaimer">Conteúdo educativo. Não substitui uma consulta com profissional de saúde. Em emergência, ligue <b>192</b>.</p>
+
+    <div class="principles-head">
+      <svg class="orn" viewBox="0 0 200 20" aria-hidden="true"><path d="M0 10 H80 M120 10 H200 M100 2 l8 8 -8 8 -8 -8z" stroke="#3a2a1e" fill="none"/></svg>
+      <h2>Os princípios da homeopatia</h2>
+      <p>Toque em cada caixinha para abrir. Em cada uma, o que a tradição diz <em>e</em> o que a ciência encontrou.</p>
+    </div>
+    <div class="principles" id="principles"></div>
+  </div>
+</section>
+
+<!-- ═════════════ HISTÓRIA ═════════════ -->
+<section id="historia" class="tab-panel" aria-labelledby="h-historia" hidden>
+  <div class="hist-hero wrap">
+    <h2 id="h-historia">Uma viagem de 2.400 anos</h2>
+    <p>Role a página e deixe o tempo passar. As plantas crescem com você.</p>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
+  </div>
+  <div class="year-meter" id="yearMeter" aria-hidden="true">
+    <span class="ym-label">ano</span><span class="ym-year" id="ymYear">400 a.C.</span><span class="ym-era" id="ymEra"></span>
+  </div>
+  <nav class="tl-dots" id="tlDots" aria-label="Eventos da linha do tempo"></nav>
+  <div class="timeline" id="timeline">
+    <svg class="vine left" id="vineL" aria-hidden="true"></svg>
+    <svg class="vine right" id="vineR" aria-hidden="true"></svg>
+    <div class="spine" aria-hidden="true"><div class="spine-fill" id="spineFill"></div></div>
+    <ol class="events" id="events"></ol>
+  </div>
+  <div class="wrap hist-end"><p>Fim da viagem — por enquanto. Quer entender o debate científico? <a href="#ciencia">Vá para a aba Ciência →</a></p></div>
+</section>
+
+<!-- ═════════════ CIÊNCIA ═════════════ -->
+<section id="ciencia" class="tab-panel" aria-labelledby="h-ciencia" hidden>
+  <div class="wrap">
+    <div class="intro">
+      <h2 id="h-ciencia">O que a ciência diz</h2>
+      <p>A homeopatia levanta perguntas fascinantes: o que sobra de uma substância diluída trilhões de vezes? A água guarda memória? Por que tanta gente sente melhora? Vamos olhar por dentro.</p>
+    </div>
+
+    <article class="sci-block ladder" id="ladder">
+      <h3>1 · A escada das diluições</h3>
+      <p class="lead-p">Arraste a barra e veja quanta água seria preciso para diluir <b>uma única gota</b> — e quantas moléculas da substância original sobram no frasco.</p>
+      <div class="ladder-grid">
+        <div class="ladder-flask" id="ladderFlask"></div>
+        <div class="ladder-info">
+          <div class="pot"><span id="potN">0C</span><small id="potRatio">tintura-mãe</small></div>
+          <div class="cmp-row"><div id="cmpIcon"></div><div><b id="cmpVol"></b><span id="cmpTxt"></span></div></div>
+          <div class="mol-row"><span class="k">moléculas originais no frasco</span><b id="molTxt"></b></div>
+          <div class="ladder-controls">
+            <input type="range" id="ladderRange" min="0" max="17" value="0" step="1" aria-label="Potência centesimal">
+            <button class="btn small" id="ladderPlay" type="button">▶ subir a escada</button>
+          </div>
+          <p class="note" id="ladderNote"></p>
+        </div>
+      </div>
+      <p class="fine">Conta feita supondo ~10¹⁸ moléculas da substância na gota inicial (uma tintura típica). Mesmo começando com 1 mol inteiro (6×10²³ moléculas), em 12C já não sobraria nenhuma.</p>
+    </article>
+
+    <article class="sci-block two">
+      <div class="art-slot" data-art="science.sucussao"></div>
+      <div>
+        <h3>2 · Sacudir faz diferença?</h3>
+        <p>Para Hahnemann, a diluição sozinha não bastava: a cada etapa o frasco era <b>sacudido com força</b> contra uma superfície firme — ele usava um livro encadernado em couro. Essa “sucussão” liberaria a força medicinal; por isso os homeopatas chamam o processo de <em>dinamização</em>.</p>
+        <p>Até hoje não se encontrou um mecanismo físico pelo qual sacudir a água faria ela carregar informação de uma substância que já não está lá.</p>
+      </div>
+    </article>
+
+    <article class="sci-block two rev">
+      <div class="art-slot" data-art="science.agua"></div>
+      <div>
+        <h3>3 · A água tem memória?</h3>
+        <p>Moléculas de água se grudam umas nas outras por <b>pontes de hidrogênio</b> — mas essas pontes se desfazem e se refazem o tempo todo, em cerca de um trilionésimo de segundo. É como uma dança de roda que troca de par sem parar.</p>
+        <p>Em 1988, Jacques Benveniste publicou na <em>Nature</em> resultados que sugeriam uma “memória da água”. Quando o experimento foi repetido às cegas, sob observação, o efeito sumiu. E fica uma pergunta divertida: se a água lembrasse de tudo, por que lembraria só do remédio — e não de todo o resto que já passou por ela?</p>
+      </div>
+    </article>
+
+    <article class="sci-block two">
+      <div class="art-slot" data-art="science.curva"></div>
+      <div>
+        <h3>4 · Então por que tanta gente melhora?</h3>
+        <ul class="why">
+          <li><b>O curso natural.</b> Resfriados, hematomas e muitas dores passam sozinhos.</li>
+          <li><b>Regressão à média.</b> A gente procura ajuda no pior momento — e depois do pior, o normal é melhorar.</li>
+          <li><b>Efeito placebo e contexto.</b> Expectativa, ritual e cuidado mudam como sentimos dor e desconforto.</li>
+          <li><b>Uma consulta longa e atenta.</b> Ser ouvido por uma hora faz bem — e isso é um efeito real.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="sci-block two rev">
+      <div class="art-slot" data-art="science.duplocego"></div>
+      <div>
+        <h3>5 · Como se descobre se algo funciona</h3>
+        <p>Para separar o efeito do remédio de todos esses outros efeitos, a medicina usa o <b>ensaio clínico randomizado duplo-cego</b>: metade das pessoas recebe o produto, metade recebe algo idêntico sem princípio ativo, sorteadas ao acaso. Nem os pacientes nem os médicos sabem quem tomou o quê até o fim.</p>
+        <p>Se os dois grupos melhoram igual, o efeito não veio do produto.</p>
+      </div>
+    </article>
+
+    <article class="sci-block">
+      <h3>6 · O que as grandes revisões concluíram</h3>
+      <div class="reviews">
+        <div class="rv"><span class="yr">2005</span><b>The Lancet</b><p>110 ensaios de homeopatia comparados a 110 da medicina convencional: nos maiores e mais rigorosos, efeito compatível com placebo.</p></div>
+        <div class="rv"><span class="yr">2010</span><b>Parlamento britânico</b><p>O comitê de Ciência e Tecnologia concluiu que a homeopatia não age além do placebo e recomendou que o sistema público não a financiasse.</p></div>
+        <div class="rv"><span class="yr">2015</span><b>NHMRC, Austrália</b><p>Revisão de 176 estudos: nenhuma condição de saúde com evidência confiável de efeito além do placebo.</p></div>
+        <div class="rv"><span class="yr">2021</span><b>França</b><p>Após avaliação da autoridade de saúde (HAS), deixa de reembolsar produtos homeopáticos.</p></div>
+        <div class="rv alt"><span class="yr">Contraponto</span><b>Pesquisadores homeopatas</b><p>Instituições como o Homeopathy Research Institute contestam os critérios da revisão australiana, e algumas meta-análises relatam pequenos efeitos — em estudos de qualidade em geral baixa ou incerta.</p></div>
+        <div class="rv alt"><span class="yr">Brasil</span><b>CFM e SUS</b><p>A homeopatia é especialidade médica desde 1980 e faz parte das práticas integrativas oferecidas pelo SUS desde 2006.</p></div>
+      </div>
+      <div class="bottom-line">
+        <h4>Em resumo</h4>
+        <p>O consenso científico atual é que os medicamentos homeopáticos não têm efeito comprovado além do placebo. Eles costumam ser seguros por serem extremamente diluídos — o risco maior é <b>atrasar um tratamento que funciona</b>. A homeopatia continua sendo um capítulo fascinante da história da medicina — e um ótimo exemplo para aprender como a ciência testa ideias.</p>
+      </div>
+    </article>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <svg class="foot-script" viewBox="0 0 300 24" aria-hidden="true"></svg>
+  <p>Ilustrações inspiradas no espírito do <em>Codex Seraphinianus</em>: ciência com liberdade poética.</p>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/art.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
