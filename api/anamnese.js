@@ -79,11 +79,13 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   }
   if (req.method === 'OPTIONS') return res.status(204).end();
+  const key = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_KEY;
+  // GET = verificação de saúde (não revela a chave)
+  if (req.method === 'GET') return res.status(200).json({ ok: true, chave_configurada: Boolean(key), modelo: MODEL });
   if (req.method !== 'POST') return res.status(405).json({ error: 'Use POST.' });
   if (origin && !ALLOWED.some(r => r.test(origin))) return res.status(403).json({ error: 'Origem não permitida.' });
 
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return res.status(500).json({ error: 'A chave ANTHROPIC_API_KEY não está configurada no Vercel.' });
+  if (!key) return res.status(500).json({ error: 'A chave ANTHROPIC_API_KEY (ou ANTHROPIC_KEY) não está configurada no Vercel.' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
