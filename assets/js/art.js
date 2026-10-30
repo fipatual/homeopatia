@@ -409,61 +409,229 @@
     <text x="268" y="182" text-anchor="middle" class="lbl">similia similibus</text>
     <text x="268" y="196" text-anchor="middle" class="lbl s">cura pelos semelhantes</text>`, 101, 'Balança clássica em equilíbrio: à esquerda fogo e gelo (cura pelos contrários), à direita fogo e fogo (cura pelos semelhantes)');
   };
-  history.paracelso = () => hp(`<g filter="url(#pencil)">
-    <ellipse cx="100" cy="125" rx="58" ry="50" fill="${P('ochre')}" class="ink"/>
-    <path d="M100 78 V172" class="ink"/><path d="M60 110 c10 -14 26 0 34 -14 M58 136 c14 -10 24 6 36 -4 M106 98 c10 10 24 -4 36 8 M106 126 c12 -10 24 6 36 -2 M70 156 c10 -6 18 6 26 0 M106 152 c10 6 22 -6 32 2" class="ink thin"/>
-    <path d="M190 120 C186 76 230 64 260 70 C296 76 312 106 302 136 C296 160 270 172 240 168 C206 166 194 150 190 120Z" fill="${P('rose')}" class="ink"/>
-    <path d="M246 70 V168 M202 110 c10 -14 26 0 34 -14 M200 140 c14 -10 24 6 36 -4 M254 96 c10 10 24 -4 36 8 M254 128 c12 -10 24 6 36 -2" class="ink thin"/>
-    <path d="M150 125 h26" class="ink" marker-start="url(#arr)" marker-end="url(#arr)"/></g>
-    <text x="100" y="200" text-anchor="middle" class="lbl">noz em corte</text><text x="246" y="200" text-anchor="middle" class="lbl">cérebro (vista de cima)</text>`, 113, 'Noz em corte ao lado de um cérebro');
-  history.quina = () => hp(`<g filter="url(#pencil)">
-    <path d="M40 200 C70 150 100 110 150 70" class="ink" stroke-width="3"/>
-    ${leaf(78, 150, 46, -150, 'green')}${leaf(96, 124, 50, -20, 'leaf')}${leaf(120, 100, 44, -160, 'green')}${leaf(140, 82, 40, 10, 'leaf')}
-    ${[[150, 62], [162, 70], [156, 52], [168, 58]].map(([x, y]) => flower(x, y, 9, 5, 'pink', 'rose')).join('')}
-    <!-- rolo de casca em corte -->
-    <g transform="translate(210 150)"><path d="M0 -20 L80 -30 A12 22 0 0 1 80 14 L0 24" fill="${P('brown')}" class="ink"/><ellipse cx="0" cy="2" rx="12" ry="22" fill="${P('orange')}" class="ink"/><path d="M0 2 m-6 0 a6 12 0 1 1 6 12 a3 6 0 1 1 -3 -6" class="ink thin"/></g>
-    <!-- hemácia com parasita -->
-    <g transform="translate(262 72)"><circle r="30" fill="${PAL.white}" class="ink" stroke-width="1.6"/><circle r="20" fill="${P('red')}" class="ink"/><circle cx="4" cy="-2" r="6" fill="none" stroke="${PAL.purple}" stroke-width="2.4"/><circle cx="9" cy="-4" r="2" fill="${PAL.purple}"/></g></g>
-    ${lab(250, 170, 290, 208, 'casca (quinina)', 'end')}${lab(266, 70, 300, 116, 'plasmódio na hemácia', 'end')}${lab(154, 60, 120, 40, 'flor da quina', 'end')}`, 127, 'Ramo de quina, casca enrolada e parasita da malária');
-  history.organon = () => hp(`<g filter="url(#pencil)">
-    <path d="M40 80 Q110 64 168 86 L168 196 Q110 176 40 192Z" fill="${P('white')}" class="ink"/>
-    <path d="M168 86 Q226 64 300 80 L300 192 Q226 176 168 196Z" fill="${P('cream')}" class="ink"/>
-    <path d="M36 84 L36 198 Q110 182 168 202 Q226 182 304 198 L304 84" fill="none" stroke="${PAL.brown}" stroke-width="4"/>
-    <path d="M232 70 L232 214 L238 206 L244 214 L244 70" fill="${P('red')}" class="ink thin"/>
-    ${[...Array(7)].map((_, i) => script(52, 104 + i * 11, 100, 200 + i, .6)).join('')}
-    ${[...Array(4)].map((_, i) => script(182, 110 + i * 11, 40, 230 + i, .6)).join('')}
-    <g transform="translate(212 166)">${flower(0, 0, 14, 8, 'violet', 'gold')}</g></g>
-    <text x="104" y="92" text-anchor="middle" class="lbl em">Organon</text>`, 139, 'Livro aberto do Organon');
-  history.navio = () => hp(`<g filter="url(#pencil)">
-    <path d="M180 170 C190 120 210 70 236 64 C262 60 270 110 278 170Z" fill="${P('green')}" class="ink"/>
-    <path d="M250 170 C256 150 274 136 292 140 C312 144 318 160 320 170Z" fill="${P('leaf')}" class="ink"/>
-    <path d="M24 170 H320" class="ink thin"/>
-    ${[[300, 120], [40, 60]].map(([x, y]) => `<path d="M${x} ${y} q8 -8 16 0 q8 -8 16 0" class="ink thin"/>`).join('')}</g>
+  /* ---------- utilidades do estilo gravura ---------- */
+  let gid = 0;
+  const SH = d => `<path d="${d}" fill="url(#p-shade)"/>`;
+  const XH = d => `<path d="${d}" fill="url(#p-cross)"/>`;
+  const sphere = (x, y, r, col) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${P(col)}" class="ink thin"/>
+    <path d="M${x - r * .5} ${y + r * .866} A${r} ${r} 0 0 0 ${x + r} ${y} A${r * 1.25} ${r * 1.25} 0 0 1 ${x - r * .5} ${y + r * .866}Z" fill="url(#p-shade)"/>
+    <ellipse cx="${x - r * .35}" cy="${y - r * .38}" rx="${r * .24}" ry="${r * .14}" fill="${PAL.white}" opacity=".9" transform="rotate(-35 ${x - r * .35} ${y - r * .38})"/>`;
+  /* sulcos sinuosos (cérebro, noz): pequenas curvas em C e S, recortadas numa forma */
+  const gyri = (x0, x1, y0, y1, seed, clip, sp = 8) => {
+    const r = rng(seed); let d = '';
+    for (let y = y0; y < y1; y += sp) for (let x = x0 + (Math.round(y / sp) % 2) * sp / 2; x < x1; x += sp) {
+      const px = x + (r() - .5) * 4, py = y + (r() - .5) * 4, a = r() * 6.283, L = 7 + r() * 5, c = Math.cos(a), sn = Math.sin(a), b = (r() < .5 ? 1 : -1) * (3 + r() * 3);
+      const ex = px + c * L, ey = py + sn * L;
+      if (r() < .5) d += `M${px.toFixed(1)} ${py.toFixed(1)} Q${(px + c * L / 2 - sn * b * 1.6).toFixed(1)} ${(py + sn * L / 2 + c * b * 1.6).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)} `;
+      else d += `M${px.toFixed(1)} ${py.toFixed(1)} C${(px + c * L * .3 - sn * b).toFixed(1)} ${(py + sn * L * .3 + c * b).toFixed(1)} ${(px + c * L * .7 + sn * b).toFixed(1)} ${(py + sn * L * .7 - c * b).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)} `;
+    }
+    return `<path d="${d}" class="ink thin" fill="none" opacity=".75" clip-path="url(#${clip})"/>`;
+  };
+  /* folha com nervuras */
+  const leafV = (x, y, l, rot, col = 'leaf') => {
+    const w = l * .3; let v = '';
+    [.2, .36, .52, .68, .82].forEach(t => { v += `M${l * t} 0 q${l * .07} ${-w * .5} ${l * .16} ${-w * .78} M${l * t} 0 q${l * .07} ${w * .5} ${l * .16} ${w * .78} `; });
+    return `<g transform="translate(${x} ${y}) rotate(${rot})">
+      <path d="M0 0 C${l * .25} ${-w} ${l * .72} ${-w} ${l} 0 C${l * .72} ${w} ${l * .25} ${w} 0 0Z" fill="${P(col)}" class="ink thin"/>
+      <path d="M0 0 C${l * .25} ${w} ${l * .72} ${w} ${l} 0 L0 0Z" fill="url(#p-shade)"/>
+      <path d="M0 0 H${l * .96} ${v}" class="ink thin" stroke-width=".55"/></g>`;
+  };
+  /* linhas de texto tipográfico */
+  const textLines = (x, y0, w, n, seed, gap = 7) => {
+    const r = rng(seed); let d = '';
+    for (let i = 0; i < n; i++) {
+      const y = y0 + i * gap, last = i === n - 1 || r() < .12; let cx = x + (i === 0 || r() < .1 ? 8 : 0); const end = last ? x + w * (.35 + r() * .4) : x + w;
+      while (cx < end - 3) { const ww = Math.min(4 + r() * 12, end - cx); d += `M${cx.toFixed(1)} ${y} h${ww.toFixed(1)} `; cx += ww + 2.5; }
+    }
+    return `<path d="${d}" stroke="${INK}" stroke-width="1.1" opacity=".55" fill="none"/>`;
+  };
+
+  history.paracelso = () => {
+    const a = 'hc' + (++gid), b = 'hc' + (++gid), c = 'hc' + (++gid);
+    return hp(`<defs>
+      <clipPath id="${a}"><path d="M100 76 C70 76 56 96 56 124 C56 150 72 172 97 172 Z"/></clipPath>
+      <clipPath id="${b}"><path d="M103 76 C130 76 144 96 144 124 C144 150 128 172 103 172 Z"/></clipPath>
+      <clipPath id="${c}"><path d="M245 72 A42 50 0 0 0 245 172Z M248 72 A42 50 0 0 1 248 172Z"/></clipPath></defs>
+    <text x="170" y="54" text-anchor="middle" class="lbl s">dosis sola facit venenum</text>
+    <ellipse cx="100" cy="189" rx="52" ry="2.6" fill="url(#p-shade)"/><ellipse cx="246" cy="177" rx="48" ry="2.4" fill="url(#p-shade)"/>
+    <!-- noz em corte -->
+    <path d="M100 62 C62 62 42 90 42 124 C42 160 66 186 100 186 C134 186 158 160 158 124 C158 90 138 62 100 62Z" fill="${P('brown')}" class="ink"/>
+    ${XH('M100 62 C62 62 42 90 42 124 C42 160 66 186 100 186 C134 186 158 160 158 124 C158 90 138 62 100 62Z')}
+    <path d="M100 70 C68 70 50 94 50 124 C50 154 70 178 100 178 C130 178 150 154 150 124 C150 94 132 70 100 70Z" fill="${P('cream')}" class="ink thin"/>
+    <path d="M100 76 C70 76 56 96 56 124 C56 150 72 172 97 172 Z M103 76 C130 76 144 96 144 124 C144 150 128 172 103 172 Z" fill="${P('ochre')}" class="ink thin"/>
+    ${gyri(52, 150, 78, 176, 5, a, 7)}${gyri(52, 150, 78, 176, 9, b, 7)}
+    <path d="M118 80 C140 92 146 124 140 150 C134 164 124 172 106 174 L106 80Z" fill="url(#p-shade)" opacity=".8"/>
+    <path d="M98 70 V178 M102 70 V178" class="ink thin"/><path d="M98 70 H102 V178 H98Z" fill="${P('brown')}"/>
+    <!-- cérebro visto de cima -->
+    <path d="M245 72 A42 50 0 0 0 245 172Z" fill="${P('rose')}" class="ink"/><path d="M248 72 A42 50 0 0 1 248 172Z" fill="${P('rose')}" class="ink"/>
+    ${gyri(200, 294, 70, 176, 21, c, 7)}
+    <path d="M264 76 C284 86 292 108 290 128 C288 150 278 164 256 171 L252 74Z" fill="url(#p-shade)" opacity=".8"/>
+    <text x="173" y="130" text-anchor="middle" style="font:22px var(--fell);fill:${INK}">≈</text>
+    <text x="100" y="204" text-anchor="middle" class="lbl">noz em corte</text>
+    <text x="246" y="204" text-anchor="middle" class="lbl">cérebro, vista superior</text>`, 113, 'Gravura: noz cortada ao meio ao lado de um cérebro visto de cima, semelhantes na forma');
+  };
+
+  history.quina = () => {
+    const fl = (x, y, rot) => `<g transform="translate(${x} ${y}) rotate(${rot})"><path d="M0 0 V-8" class="ink thin" stroke-width=".6"/>
+      <path d="M-1.6 -6 L-1.2 -12 L1.2 -12 L1.6 -6Z" fill="${P('pink')}" class="ink thin" stroke-width=".5"/>
+      ${[0, 72, 144, 216, 288].map(a => `<path transform="translate(0 -12.5) rotate(${a})" d="M0 0 C1.5 -1.2 1.5 -3.6 0 -4.6 C-1.5 -3.6 -1.5 -1.2 0 0Z" fill="${P('rose')}" class="ink thin" stroke-width=".45"/>`).join('')}</g>`;
+    const rc = 'hc' + (++gid); const r = rng(31);
+    let cells = '';
+    [[250, 72, 0], [282, 80, 1], [262, 102, 0], [240, 98, 0], [286, 108, 0], [266, 60, 0]].forEach(([x, y, inf]) => {
+      cells += `<ellipse cx="${x}" cy="${y}" rx="10" ry="9" fill="${P('red')}" class="ink thin"/><ellipse cx="${x}" cy="${y}" rx="4.6" ry="4" fill="${PAL.rose}" opacity=".7"/>`;
+      if (inf) cells += `<circle cx="${x + 2}" cy="${y - 1}" r="3.4" fill="none" stroke="${PAL.purple}" stroke-width="1.3"/><circle cx="${x + 5}" cy="${y - 2.6}" r="1.4" fill="${PAL.purple}"/>`;
+    });
+    let bark = '';
+    for (let i = 0; i < 7; i++) bark += `M${8 + i * 11} ${-14 - i * .7 + r() * 3} l${4 + r() * 4} ${1 + r() * 2} `;
+    return hp(`<defs><clipPath id="${rc}"><circle cx="264" cy="86" r="31"/></clipPath></defs>
+    <!-- ramo de Cinchona -->
+    <path d="M36 204 C58 164 92 116 150 70" class="ink" stroke-width="1.6"/>
+    ${leafV(56, 172, 46, -158, 'green')}${leafV(58, 170, 44, -28, 'leaf')}
+    ${leafV(82, 136, 42, -165, 'leaf')}${leafV(84, 134, 40, -18, 'green')}
+    ${leafV(110, 104, 36, -170, 'green')}${leafV(112, 102, 34, -8, 'leaf')}
+    ${leafV(134, 82, 26, -175, 'leaf')}${leafV(136, 80, 24, 8, 'green')}
+    <path d="M150 70 l6 -8 M150 70 l-4 -10 M150 70 l12 -2 M156 62 l8 -6" class="ink thin" stroke-width=".6"/>
+    ${fl(156, 62, 20)}${fl(146, 60, -25)}${fl(162, 68, 70)}${fl(164, 56, 45)}${fl(152, 52, 0)}${fl(140, 64, -60)}
+    <!-- campo do microscópio -->
+    <circle cx="264" cy="86" r="34" fill="none" class="ink" stroke-width="2.2"/>
+    <circle cx="264" cy="86" r="31" fill="${PAL.white}" class="ink thin"/>
+    <g clip-path="url(#${rc})">${cells}</g>
+    <path d="M240 108 A31 31 0 0 0 292 98" fill="none" stroke="${INK}" stroke-width="3" opacity=".15"/>
+    <text x="264" y="134" text-anchor="middle" class="lbl s">hemácia com plasmódio</text>
+    <!-- casca enrolada -->
+    <ellipse cx="244" cy="188" rx="54" ry="2.6" fill="url(#p-shade)"/>
+    <g transform="translate(196 168) rotate(-4)">
+      <path d="M0 -16 L92 -20 A9 17 0 0 1 92 14 L0 18Z" fill="${P('brown')}" class="ink"/>
+      <path d="M0 4 L92 2 A9 17 0 0 1 92 14 L0 18Z" fill="url(#p-cross)"/>
+      <path d="${bark}" class="ink thin" opacity=".7"/><path d="M6 -6 L88 -9 M8 8 L86 6" class="ink thin" opacity=".45"/>
+      <ellipse cx="0" cy="1" rx="9" ry="17" fill="${P('orange')}" class="ink thin"/>
+      <path d="M0 1 m0 -11 a7 11 0 1 0 6 6 a4.5 7 0 1 0 -4 -4 a2.4 3.6 0 1 0 2 2" class="ink thin" fill="none"/></g>
+    <text x="104" y="210" text-anchor="middle" class="lbl">Cinchona officinalis</text>
+    <text x="244" y="210" text-anchor="middle" class="lbl s">casca: fonte da quinina</text>`, 127, 'Gravura botânica: ramo de quina, casca enrolada e hemácia com o parasita da malária');
+  };
+
+  history.organon = () => hp(`
+    <ellipse cx="170" cy="204" rx="140" ry="4" fill="url(#p-shade)"/>
+    <path d="M36 78 L36 198 Q104 186 170 204 Q236 186 304 198 L304 78 Q236 66 170 84 Q104 66 36 78Z" fill="${P('brown')}" class="ink"/>
+    ${[6, 4, 2].map(o => `<path d="M${42 - o / 2} ${190 + o} Q104 ${178 + o} 168 ${196 + o} M${298 + o / 2} ${190 + o} Q236 ${178 + o} 172 ${196 + o}" class="ink thin" opacity=".55"/>`).join('')}
+    <path d="M42 74 Q106 62 168 82 L168 194 Q106 176 42 188Z" fill="${PAL.white}" class="ink thin"/>
+    <path d="M172 82 Q234 62 298 74 L298 188 Q234 176 172 194Z" fill="${PAL.white}" class="ink thin"/>
+    ${SH('M154 78 Q162 79 168 82 L168 194 Q162 190 154 188Z')}${SH('M172 82 Q178 79 184 78 L184 188 Q178 190 172 194Z')}
+    <text x="104" y="102" text-anchor="middle" style="font:15px var(--sc);letter-spacing:1.6px;fill:${INK}">ORGANON</text>
+    <text x="104" y="115" text-anchor="middle" style="font:italic 9px var(--fell);fill:${INK}">der rationellen Heilkunde</text>
+    <path d="M84 123 H124 M98 126.5 H110" class="ink thin"/>
+    <text x="104" y="138" text-anchor="middle" style="font:italic 7.5px var(--fell);fill:${INK}">von</text>
+    <text x="104" y="149" text-anchor="middle" style="font:10px var(--sc);letter-spacing:.6px;fill:${INK}">Samuel Hahnemann</text>
+    <g transform="translate(104 160)"><path d="M-10 0 C-5 -4 -2 4 0 0 C2 -4 5 4 10 0 M0 -3 V3" class="ink thin"/></g>
+    <text x="104" y="176" text-anchor="middle" style="font:8px var(--fell);letter-spacing:.8px;fill:${INK}">DRESDEN · 1810</text>
+    <text x="236" y="94" text-anchor="middle" style="font:10px var(--sc);fill:${INK}">§ 1.</text>
+    ${textLines(190, 104, 94, 11, 41)}
+    <path d="M262 68 L262 214 L267 207 L272 214 L272 70" fill="${P('red')}" class="ink thin"/>`, 139, 'Gravura do livro Organon aberto na folha de rosto, de Samuel Hahnemann, 1810');
+
+  history.navio = () => {
+    const sail = (x, y, wTop, wBot, h) => `<path d="M${x - wTop / 2} ${y} L${x + wTop / 2} ${y} Q${x + wBot / 2 + 3} ${y + h / 2} ${x + wBot / 2} ${y + h} L${x - wBot / 2} ${y + h} Q${x - wBot / 2 + 3} ${y + h / 2} ${x - wTop / 2} ${y}Z" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/>
+      <path d="M${x + wBot / 2 - 4} ${y + 2} Q${x + wBot / 2 + 1} ${y + h / 2} ${x + wBot / 2 - 2} ${y + h - 1} L${x + wBot / 2 - 6} ${y + h - 1} Q${x + wBot / 2 - 4} ${y + h / 2} ${x + wBot / 2 - 7} ${y + 2}Z" fill="url(#p-shade)"/>
+      <path d="M${x - wTop / 2 - 2} ${y} H${x + wTop / 2 + 2}" stroke="${INK}" stroke-width="1.1"/>`;
+    let sea = ''; const r = rng(57);
+    for (let i = 0; i < 6; i++) { const y = 176 + i * 4; let x = 14 + r() * 20; while (x < 320) { const w = 10 + r() * 34; sea += `M${x.toFixed(1)} ${y} h${Math.min(w, 326 - x).toFixed(1)} `; x += w + 4 + r() * 10 + i; } }
+    let sky = ''; for (let i = 0; i < 4; i++) sky += `M${150 + i * 9} ${84 + i * 4} h${40 - i * 9} `;
+    return hp(`
+    <path d="${sky}" class="ink thin" opacity=".4"/>
+    <path d="M160 70 q5 -4 10 0 q5 -4 10 0 M296 104 q4 -3 8 0 q4 -3 8 0" class="ink thin"/>
+    <!-- Pão de Açúcar e Urca -->
+    <path d="M200 172 C204 120 220 70 244 64 C268 60 280 110 288 172Z" fill="${P('leaf')}" class="ink"/>
+    ${SH('M246 66 C266 64 278 110 288 172 L258 172 C258 130 256 90 246 66Z')}
+    <path d="M222 120 q8 -6 12 4 M236 92 q6 -3 9 3 M228 150 q10 -8 16 2" class="ink thin" opacity=".6"/>
+    <path d="M166 172 C172 152 190 138 210 140 C232 142 248 158 252 172Z" fill="${P('green')}" class="ink"/>
+    ${SH('M214 141 C234 144 248 158 252 172 L226 172 C226 160 222 148 214 141Z')}
+    <path d="M300 172 C304 160 314 154 326 154 L326 172Z" fill="${P('green')}" class="ink thin"/>
+    <path d="M12 172 H328" class="ink thin"/>
+    <path d="${sea}" stroke="${PAL.blue}" stroke-width=".8" opacity=".7" fill="none"/>
     <g class="anim"><g class="boat">
-      <path d="M50 168 L150 168 L136 190 L62 190Z" fill="${P('brown')}" stroke="${INK}"/>
-      <path d="M86 168 V84 M118 168 V96" stroke="${INK}" stroke-width="2"/>
-      <path d="M88 88 C108 100 108 140 88 150Z M120 100 C138 110 138 140 120 150Z" fill="${P('white')}" stroke="${INK}"/>
-      <path d="M86 84 l14 5 l-14 5z" fill="${PAL.red}"/></g>
-      <path class="waves" d="M-40 194 q20 -10 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="${PAL.blue}" stroke-width="3"/></g>
-    ${lab(236, 70, 290, 52, 'Pão de Açúcar', 'start')}`, 151, 'Navio chegando ao Rio de Janeiro');
-  history.colera = () => hp(`<g filter="url(#pencil)">
-    <rect x="70" y="60" width="34" height="130" rx="6" fill="${P('teal')}" class="ink"/>
-    <path d="M66 60 h42 l-6 -14 h-30z" fill="${P('teal')}" class="ink"/><circle cx="87" cy="40" r="8" fill="${P('gold')}" class="ink"/>
-    <path d="M104 90 L150 70" class="ink" stroke-width="4"/><path d="M70 120 C44 120 40 130 42 142 L52 142 C52 134 56 132 70 132" fill="${P('teal')}" class="ink"/>
-    <path d="M56 194 h62 v10 h-62z" fill="${P('gray')}" class="ink"/>
-    <circle cx="228" cy="110" r="62" fill="${PAL.white}" class="ink" stroke-width="3"/><path d="M272 154 L310 196" class="ink" stroke-width="8"/>
-    ${[...Array(9)].map((_, i) => `<path transform="translate(${196 + (i % 3) * 30 + (i > 5 ? 8 : 0)} ${84 + Math.floor(i / 3) * 26}) rotate(${i * 40})" d="M-8 2 C-6 -6 6 -6 8 0 M8 0 C12 4 16 2 18 6" fill="none" stroke="${PAL.red}" stroke-width="3.2" stroke-linecap="round"/>`).join('')}</g>
+      <path d="M40 160 L156 160 Q152 176 136 182 L66 182 Q50 176 40 160Z" fill="${P('brown')}" stroke="${INK}"/>
+      ${XH('M44 166 L152 166 Q148 176 136 182 L66 182 Q52 176 44 166Z')}
+      <path d="M42 164 H154" stroke="${INK}" stroke-width=".6"/>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="${60 + i * 15}" y="168" width="4" height="3" fill="${INK}"/>`).join('')}
+      <path d="M156 160 L188 142" stroke="${INK}" stroke-width="1.4"/>
+      <path d="M82 160 V66 M120 160 V74" stroke="${INK}" stroke-width="1.8"/>
+      <path d="M82 66 L44 160 M82 66 L150 160 M120 74 L156 160 M120 74 L188 142 M82 92 L120 98" stroke="${INK}" stroke-width=".45" opacity=".7"/>
+      ${sail(82, 76, 16, 22, 18)}${sail(82, 98, 26, 32, 24)}${sail(82, 126, 36, 40, 28)}
+      ${sail(120, 84, 14, 20, 16)}${sail(120, 104, 24, 30, 22)}${sail(120, 130, 32, 36, 24)}
+      <path d="M124 92 L182 144 L128 140Z" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/>
+      <path d="M82 66 l14 3 l-14 4z" fill="${PAL.red}" stroke="${INK}" stroke-width=".5"/></g>
+      <path class="waves" d="M-80 188 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="${PAL.blue}" stroke-width="1.1"/></g>
+    ${lab(242, 66, 214, 54, 'Pão de Açúcar', 'end').replace('class="lbl"', 'class="lbl s"')}
+    <text x="170" y="210" text-anchor="middle" class="lbl s">baía de Guanabara, Rio de Janeiro</text>`, 151, 'Gravura de um veleiro chegando à baía de Guanabara, com o Pão de Açúcar ao fundo');
+  };
+
+  history.colera = () => {
+    const mc = 'hc' + (++gid); const r = rng(77); let bugs = '', dots = '';
+    for (let i = 0; i < 11; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 42, x = 236 + Math.cos(a) * d, y = 110 + Math.sin(a) * d;
+      bugs += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(r() * 360).toFixed(0)})"><path d="M-9 3 C-8 -5 5 -7 9 -1 C5 -3.4 -4 -2 -6 4.4Z" fill="${P('red')}" class="ink thin" stroke-width=".6"/><path d="M9 -1 c4 3 7 -3 11 0 s5 2 7 0" class="ink thin" stroke-width=".5" fill="none"/></g>`; }
+    for (let i = 0; i < 70; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 52; dots += `<circle cx="${(236 + Math.cos(a) * d).toFixed(1)}" cy="${(110 + Math.sin(a) * d).toFixed(1)}" r=".55" fill="${INK}" opacity=".45"/>`; }
+    return hp(`<defs><clipPath id="${mc}"><circle cx="236" cy="110" r="56"/></clipPath></defs>
+    <ellipse cx="92" cy="192" rx="44" ry="2.4" fill="url(#p-shade)"/>
+    <!-- bomba de ferro fundido -->
+    <path d="M66 182 h52 v8 h-52z" fill="${P('gray')}" class="ink"/>${SH('M104 182 h14 v8 h-14z')}
+    <path d="M72 174 h40 v8 h-40z" fill="${P('gray')}" class="ink"/>
+    <path d="M78 76 L106 76 L104 174 L80 174Z" fill="${P('gray')}" class="ink"/>
+    ${XH('M96 76 L106 76 L104 174 L96 174Z')}
+    <path d="M84 84 V168 M89 84 V168 M94 84 V168" class="ink thin" opacity=".5"/>
+    <rect x="75" y="108" width="34" height="5" fill="${P('gray')}" class="ink thin"/><rect x="76" y="148" width="32" height="5" fill="${P('gray')}" class="ink thin"/>
+    <path d="M74 76 h36 l-4 -8 h-28z" fill="${P('gray')}" class="ink"/>
+    <path d="M80 68 C80 54 104 54 104 68Z" fill="${P('gray')}" class="ink"/>${SH('M94 56 C102 58 104 62 104 68 L94 68Z')}
+    <path d="M92 56 V48" class="ink"/><circle cx="92" cy="46" r="3" fill="${P('gray')}" class="ink thin"/>
+    <path d="M106 96 C120 92 136 82 150 70" class="ink" stroke-width="3.2"/><circle cx="151" cy="69" r="3.6" fill="${P('gray')}" class="ink thin"/>
+    <circle cx="106" cy="96" r="3" fill="${P('gray')}" class="ink thin"/>
+    <path d="M78 122 H62 C54 122 50 128 50 136 V146 H44 V134 C44 122 52 114 62 114 H78Z" fill="${P('gray')}" class="ink"/>
     <g class="anim"><path class="drip" d="M47 150 c-2 5 -4 8 -4 10 a4 4 0 0 0 8 0 c0 -2 -2 -5 -4 -10z" fill="${PAL.sky}" stroke="${INK}" stroke-width=".6"/></g>
-    ${lab(87, 40, 130, 30, 'bomba da Broad Street')}${lab(250, 132, 300, 220 - 4, 'Vibrio cholerae', 'end')}`, 163, 'Bomba d’água de Londres e bactérias do cólera ao microscópio');
-  history.penicilina = () => hp(`<g filter="url(#pencil)">
-    <ellipse cx="170" cy="134" rx="120" ry="64" fill="${P('cream')}" class="ink" stroke-width="1.8"/>
-    <ellipse cx="170" cy="130" rx="112" ry="58" fill="${P('yellow')}" opacity=".5"/>
-    <ellipse cx="128" cy="124" rx="40" ry="24" fill="${P('white')}" class="ink thin" stroke-dasharray="3 3"/>
-    <ellipse cx="128" cy="124" rx="18" ry="11" fill="${P('teal')}" class="ink"/>
-    ${[...Array(14)].map((_, i) => { const a = i * .45; return `<circle cx="${128 + Math.cos(a) * 14}" cy="${124 + Math.sin(a) * 8}" r="3" fill="${P('green')}" class="ink thin"/>`; }).join('')}
-    ${[...Array(22)].map((_, i) => { const r = rng(i + 3); const a = r() * 6.28, d = .55 + r() * .4; const x = 170 + Math.cos(a) * 104 * d, y = 130 + Math.sin(a) * 52 * d; return Math.hypot((x - 128) / 44, (y - 124) / 27) > 1 ? `<circle cx="${x}" cy="${y}" r="${3 + r() * 3}" fill="${P('ochre')}" class="ink thin"/>` : ''; }).join('')}
-    </g>${lab(128, 124, 70, 50, 'fungo Penicillium', 'start')}${lab(160, 124, 318, 50, 'halo sem bactérias', 'end')}${lab(240, 150, 300, 196, 'colônias de bactérias', 'end')}`, 189, 'Placa de Petri com fungo e halo sem bactérias');
-  history.agua = () => hp(waterNet(340, 230), 177, 'Rede de moléculas de água e ligações de hidrogênio');
+    <!-- campo do microscópio -->
+    <circle cx="236" cy="110" r="60" fill="none" class="ink" stroke-width="2.4"/>
+    <circle cx="236" cy="110" r="56" fill="${PAL.white}" class="ink thin"/>
+    <g clip-path="url(#${mc})">${dots}${bugs}</g>
+    <path d="M196 150 A56 56 0 0 0 290 130" fill="none" stroke="${INK}" stroke-width="5" opacity=".1"/>
+    <text x="92" y="206" text-anchor="middle" class="lbl s">bomba da Broad Street, 1854</text>
+    <text x="236" y="188" text-anchor="middle" class="lbl">Vibrio cholerae</text>
+    <text x="236" y="201" text-anchor="middle" class="lbl s">ao microscópio</text>`, 163, 'Gravura da bomba d’água da Broad Street, em Londres, e das bactérias do cólera ao microscópio');
+  };
+
+  history.penicilina = () => {
+    const r = rng(19); let col = '', hy = '';
+    for (let i = 0; i < 40; i++) {
+      const a = r() * 6.283, d = .3 + r() * .62, x = 170 + Math.cos(a) * 112 * d, y = 122 + Math.sin(a) * 52 * d;
+      const k = Math.hypot((x - 124) / 46, (y - 116) / 26); if (k < 1.05) continue;
+      const s = k < 1.35 ? 1.6 + r() : 2.6 + r() * 2.6, o = k < 1.35 ? .45 : 1;
+      col += `<g opacity="${o}"><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${s.toFixed(1)}" ry="${(s * .62).toFixed(1)}" fill="${P('ochre')}" class="ink thin" stroke-width=".6"/><ellipse cx="${(x - s * .3).toFixed(1)}" cy="${(y - s * .2).toFixed(1)}" rx="${(s * .3).toFixed(1)}" ry="${(s * .16).toFixed(1)}" fill="${PAL.white}" opacity=".8"/></g>`;
+    }
+    for (let i = 0; i < 40; i++) { const a = i / 40 * 6.283 + r() * .1, r1 = 15 + r() * 2, r2 = 19 + r() * 4; hy += `M${(124 + Math.cos(a) * r1).toFixed(1)} ${(116 + Math.sin(a) * r1 * .6).toFixed(1)} L${(124 + Math.cos(a) * r2).toFixed(1)} ${(116 + Math.sin(a) * r2 * .6).toFixed(1)} `; }
+    return hp(`
+    <ellipse cx="170" cy="190" rx="124" ry="5" fill="url(#p-shade)"/>
+    <path d="M46 122 V132 A124 58 0 0 0 294 132 V122" fill="${P('sky')}" class="ink" opacity=".9"/>
+    ${SH('M46 122 V132 A124 58 0 0 0 294 132 V122 A124 58 0 0 1 46 122Z')}
+    <ellipse cx="170" cy="122" rx="124" ry="58" fill="${PAL.white}" class="ink"/>
+    <ellipse cx="170" cy="123" rx="117" ry="53" fill="${P('yellow')}" opacity=".55" class="ink thin"/>
+    <ellipse cx="124" cy="116" rx="44" ry="25" fill="${PAL.white}" opacity=".85" stroke="${INK}" stroke-width=".6" stroke-dasharray="2.5 2.5"/>
+    <path d="${hy}" class="ink thin" stroke-width=".5"/>
+    <ellipse cx="124" cy="116" rx="16" ry="9.6" fill="${P('teal')}" class="ink thin"/>
+    <ellipse cx="124" cy="116" rx="9" ry="5.4" fill="${P('green')}" class="ink thin"/>
+    ${SH('M124 106.4 A16 9.6 0 0 1 124 125.6 A10 9.6 0 0 0 124 106.4Z')}
+    ${col}
+    <path d="M70 92 A112 50 0 0 1 150 72" fill="none" stroke="${PAL.white}" stroke-width="3" opacity=".9"/>
+    ${lab(122, 112, 66, 56, 'fungo Penicillium', 'start')}
+    ${lab(160, 112, 300, 56, 'zona sem bactérias', 'end')}
+    ${lab(232, 146, 296, 204, 'colônias de bactérias', 'end').replace('class="lbl"', 'class="lbl s"')}`, 189, 'Gravura de uma placa de Petri com o fungo Penicillium e uma zona sem bactérias ao redor');
+  };
+
+  history.agua = () => {
+    const pts = []; const r = rng(4);
+    for (let i = 0; i < 14; i++) pts.push([48 + (i % 5) * 60 + r() * 12, 66 + Math.floor(i / 5) * 48 + r() * 10]);
+    let bonds = '';
+    pts.forEach((a, i) => pts.forEach((b, j) => { if (j > i && Math.hypot(a[0] - b[0], a[1] - b[1]) < 72) bonds += `<path class="hb" style="animation-delay:${((i * 7 + j) % 10) * .23}s" d="M${a[0]} ${a[1]} L${b[0]} ${b[1]}" stroke="${PAL.blue}" stroke-width="1.1" stroke-dasharray="1.6 3" stroke-linecap="round"/>`; }));
+    const mols = pts.map(([x, y], i) => `<g class="mol" style="animation-delay:${i * .2}s;transform-origin:${x}px ${y}px">
+      <path d="M${x} ${y} L${x - 11} ${y + 8} M${x} ${y} L${x + 11} ${y + 8}" stroke="${INK}" stroke-width="2.4"/>
+      ${sphere(x - 11, y + 8, 5.6, 'white')}${sphere(x + 11, y + 8, 5.6, 'white')}${sphere(x, y, 9.5, 'red')}</g>`).join('');
+    return hp(`<g class="anim">${bonds}${mols}</g>
+      <text x="170" y="206" text-anchor="middle" class="lbl s">pontes de hidrogênio (···) duram ~1 trilionésimo de segundo</text>`, 177, 'Gravura de moléculas de água ligadas por pontes de hidrogênio');
+  };
 
   function waterNet(w, h) {
     const pts = []; const r = rng(4);
