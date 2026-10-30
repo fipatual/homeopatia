@@ -52,7 +52,7 @@
     e.preventDefault();
     const t = q.value.trim();
     if (!t) { q.focus(); return; }
-    answer(t, chosen && t === chosen.chip ? chosen : null);
+    if (chosen && t === chosen.chip) answer(t, chosen); else consult(t);
   });
   q.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) $('#ask').requestSubmit(); });
 
@@ -101,6 +101,53 @@
     result.innerHTML = h;
     const tgt = fromChip ? stage : result;
     requestAnimationFrame(() => { const y = tgt.getBoundingClientRect().top + scrollY - 150; window.scrollTo({ top: y, behavior: 'smooth' }); });
+  }
+
+  /* ── consulta com IA (função /api/anamnese no Vercel) ── */
+  const API = /vercel\.app$/.test(location.hostname) || /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && location.port === '3000'
+    ? '/api/anamnese' : 'https://homeopatia.vercel.app/api/anamnese';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const list = a => Array.isArray(a) && a.length ? `<ul>${a.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  const row = (k, v) => v ? `<div class="an-row"><span class="an-k">${k}</span><div>${v}</div></div>` : '';
+  let busy = false;
+  async function consult(text) {
+    if (busy) return; busy = true;
+    const btn = $('#ask button[type=submit]'); btn.disabled = true;
+    stage.hidden = true; fig.innerHTML = '';
+    result.innerHTML = `<div class="card body wide loading"><span class="kicker">consultório</span><h4>Montando sua anamnese…</h4><p>Organizando o que você contou como um homeopata faria. Isso leva uns 20 a 40 segundos.</p><div class="dots"><i></i><i></i><i></i></div></div>`;
+    requestAnimationFrame(() => window.scrollTo({ top: result.getBoundingClientRect().top + scrollY - 150, behavior: 'smooth' }));
+    try {
+      const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 70000);
+      const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ texto: text }), signal: ctl.signal });
+      clearTimeout(to);
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Não foi possível gerar a anamnese agora.');
+      renderAnamnese(d, text);
+    } catch (e) {
+      answer(text, null);
+      result.insertAdjacentHTML('afterbegin', `<div class="card alert wide"><span class="kicker">aviso</span><h4>A anamnese completa não respondeu</h4><p>${esc(e.name === 'AbortError' ? 'Demorou demais para responder.' : e.message)} Enquanto isso, veja a orientação geral abaixo.</p></div>`);
+    } finally { busy = false; btn.disabled = false; }
+  }
+  function renderAnamnese(d, text) {
+    const urgentLocal = D.urgent.filter(u => u.re.test(text) || u.re.test(norm(text)));
+    let h = '';
+    if (d.urgente) h += `<div class="card urgent wide"><h4>Atenção primeiro</h4><p>${esc(d.urgente)}</p></div>`;
+    else if (urgentLocal.length) h += `<div class="card urgent wide"><h4>Atenção primeiro</h4>${urgentLocal.map(u => `<p>${u.msg}</p>`).join('')}</div>`;
+    const an = row('Queixa principal', esc(d.queixa_principal)) + row('História', esc(d.historia)) + row('Sensações', list(d.sensacoes)) +
+      row('Piora com', list(d.piora)) + row('Melhora com', list(d.melhora)) + row('Sintomas que acompanham', list(d.concomitantes)) +
+      row('Sintomas gerais', list(d.gerais)) + row('Mente e emoções', list(d.mentais));
+    h += `<div class="res-grid">
+      <div class="card body wide"><span class="kicker">anamnese homeopática</span><h4>Seu caso, organizado</h4><p>${esc(d.resumo)}</p>${an ? `<div class="an">${an}</div>` : ''}</div>`;
+    if (d.perguntas_que_faltam && d.perguntas_que_faltam.length) h += `<div class="card wide"><span class="kicker">para completar o caso</span><h4>O homeopata ainda perguntaria</h4>${list(d.perguntas_que_faltam)}<p><i>Responda essas perguntas na caixa acima, junto com o que você já escreveu, e peça de novo para uma anamnese mais completa.</i></p></div>`;
+    if (d.no_corpo) h += `<div class="card body"><span class="kicker">o que acontece no corpo</span><h4>Por dentro</h4><p>${esc(d.no_corpo)}</p></div>`;
+    if (d.medicamentos_da_tradicao && d.medicamentos_da_tradicao.length) h += `<div class="card trad"><span class="kicker">na tradição homeopática</span><h4>Medicamentos citados nos livros</h4>
+      <ul class="rem">${d.medicamentos_da_tradicao.map(m => `<li><b>${esc(m.nome)}</b><span class="orig">${esc(m.origem)}</span><br>${esc(m.por_que)}</li>`).join('')}</ul></div>`;
+    if (d.procurar_medico_se && d.procurar_medico_se.length) h += `<div class="card alert"><span class="kicker">sinais de alerta</span><h4>Procure um médico se…</h4>${list(d.procurar_medico_se)}</div>`;
+    if (d.ciencia) h += `<div class="card sci"><span class="kicker">o que a ciência diz</span><h4>O que comprovadamente ajuda</h4><p>${esc(d.ciencia)}</p></div>`;
+    h += `</div>`;
+    const c = match(text);
+    if (c) h += `<p class="an-note"><i>Sua descrição lembra o exemplo “${esc(c.chip)}”. Toque nele acima para ver a prancha ilustrada.</i></p>`;
+    result.innerHTML = h;
   }
 
   /* princípios — caixinhas que viram */
