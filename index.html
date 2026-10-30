@@ -23,48 +23,16 @@
     <p class="tag">um gabinete de curiosidades sobre uma medicina de 230 anos</p>
   </div>
   <nav class="tabs" aria-label="Seções">
-    <a href="#consulta" data-tab="consulta">Consulta</a>
     <a href="#historia" data-tab="historia">História</a>
     <a href="#ciencia" data-tab="ciencia">Ciência</a>
+    <a href="#consulta" data-tab="consulta">Consulta</a>
   </nav>
 </header>
 
 <main id="main">
 
-<!-- ═════════════ CONSULTA ═════════════ -->
-<section id="consulta" class="tab-panel" aria-labelledby="h-consulta">
-  <div class="wrap">
-    <div class="intro">
-      <h2 id="h-consulta">O que você está sentindo?</h2>
-      <p>Descreva com suas palavras, ou escolha um exemplo. Vamos mostrar <em>o que acontece no seu corpo</em>, como um homeopata pensaria o caso — e o que a ciência diz sobre isso.</p>
-    </div>
-
-    <form id="ask" class="ask" autocomplete="off">
-      <label for="q" class="sr">Seus sintomas</label>
-      <textarea id="q" rows="3" placeholder="Ex.: acordo toda madrugada e não consigo voltar a dormir…"></textarea>
-      <button type="submit" class="btn">Pedir orientação <span aria-hidden="true">✦</span></button>
-    </form>
-
-    <div class="chips" id="chips" role="list" aria-label="Exemplos de queixas"></div>
-
-    <div id="stage" class="stage" hidden>
-      <figure class="plate-fig" id="plateFig"></figure>
-    </div>
-    <div id="result" class="result" aria-live="polite"></div>
-
-    <p class="disclaimer">Conteúdo educativo. Não substitui uma consulta com profissional de saúde. Em emergência, ligue <b>192</b>.</p>
-
-    <div class="principles-head">
-      <svg class="orn" viewBox="0 0 200 20" aria-hidden="true"><path d="M0 10 H80 M120 10 H200 M100 2 l8 8 -8 8 -8 -8z" stroke="#3a2a1e" fill="none"/></svg>
-      <h2>Os princípios da homeopatia</h2>
-      <p>Toque em cada caixinha para abrir. Em cada uma, o que a tradição diz <em>e</em> o que a ciência encontrou.</p>
-    </div>
-    <div class="principles" id="principles"></div>
-  </div>
-</section>
-
 <!-- ═════════════ HISTÓRIA ═════════════ -->
-<section id="historia" class="tab-panel" aria-labelledby="h-historia" hidden>
+<section id="historia" class="tab-panel" aria-labelledby="h-historia">
   <div class="hist-hero wrap">
     <h2 id="h-historia">Uma viagem de 2.400 anos</h2>
     <p>Role a página e deixe o tempo passar. As plantas crescem com você.</p>
@@ -165,6 +133,38 @@
         <p>O consenso científico atual é que os medicamentos homeopáticos não têm efeito comprovado além do placebo. Eles costumam ser seguros por serem extremamente diluídos — o risco maior é <b>atrasar um tratamento que funciona</b>. A homeopatia continua sendo um capítulo fascinante da história da medicina — e um ótimo exemplo para aprender como a ciência testa ideias.</p>
       </div>
     </article>
+  </div>
+</section>
+
+<!-- ═════════════ CONSULTA ═════════════ -->
+<section id="consulta" class="tab-panel" aria-labelledby="h-consulta" hidden>
+  <div class="wrap">
+    <div class="intro">
+      <h2 id="h-consulta">O que você está sentindo?</h2>
+      <p>Descreva com suas palavras, ou escolha um exemplo. Vamos mostrar <em>o que acontece no seu corpo</em>, como um homeopata pensaria o caso — e o que a ciência diz sobre isso.</p>
+    </div>
+
+    <form id="ask" class="ask" autocomplete="off">
+      <label for="q" class="sr">Seus sintomas</label>
+      <textarea id="q" rows="3" placeholder="Ex.: acordo toda madrugada e não consigo voltar a dormir…"></textarea>
+      <button type="submit" class="btn">Pedir orientação <span aria-hidden="true">✦</span></button>
+    </form>
+
+    <div class="chips" id="chips" role="list" aria-label="Exemplos de queixas"></div>
+
+    <div id="stage" class="stage" hidden>
+      <figure class="plate-fig" id="plateFig"></figure>
+    </div>
+    <div id="result" class="result" aria-live="polite"></div>
+
+    <p class="disclaimer">Conteúdo educativo. Não substitui uma consulta com profissional de saúde. Em emergência, ligue <b>192</b>.</p>
+
+    <div class="principles-head">
+      <svg class="orn" viewBox="0 0 200 20" aria-hidden="true"><path d="M0 10 H80 M120 10 H200 M100 2 l8 8 -8 8 -8 -8z" stroke="#3a2a1e" fill="none"/></svg>
+      <h2>Os princípios da homeopatia</h2>
+      <p>Toque em cada caixinha para abrir. Em cada uma, o que a tradição diz <em>e</em> o que a ciência encontrou.</p>
+    </div>
+    <div class="principles" id="principles"></div>
   </div>
 </section>
 </main>

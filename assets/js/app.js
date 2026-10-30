@@ -13,10 +13,10 @@
   const watch = root => $$('.art', root).forEach(el => io.observe(el));
 
   /* ═════════ ROTEADOR DE ABAS ═════════ */
-  const tabs = ['consulta', 'historia', 'ciencia'];
+  const tabs = ['historia', 'ciencia', 'consulta'];
   function route() {
-    const id = (location.hash || '#consulta').slice(1);
-    const tab = tabs.includes(id) ? id : 'consulta';
+    const id = (location.hash || '#historia').slice(1);
+    const tab = tabs.includes(id) ? id : 'historia';
     tabs.forEach(t => { $('#' + t).hidden = t !== tab; });
     $$('.tabs a').forEach(a => a.dataset.tab === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
     document.body.dataset.tab = tab;
