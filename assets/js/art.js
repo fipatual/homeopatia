@@ -139,12 +139,12 @@
     ${lab(232, 110, 214, 92, 'epiderme', 'end')}${lab(232, 128, 214, 122, 'derme', 'end')}
     ${lab(232, 196, 214, 196, 'gordura', 'end')}${lab(232, 252, 214, 252, 'músculo', 'end')}
     ${lab(315, 140, 330, 66, 'capilar rompido')}
-    ${dim(392, 117, 392, 169, '~2 mm', 'l')}
+    
     ${lab(62, 72, 22, 52, 'Arnica', 'start')}
     <g class="stages">
       ${[['purple', 'dia 1'], ['green', 'dia 5'], ['yellow', 'dia 8'], ['skin', 'dia 14']].map(([c, t], i) =>
-        `<g transform="translate(${252 + i * 48} 300)"><circle r="11" fill="${P(c)}" class="ink"/><circle r="15" class="ring" style="animation-delay:${i * 1.2}s"/><text y="27" text-anchor="middle" class="lbl s">${t}</text></g>`).join('')}
-      <path d="M268 300 h16 M316 300 h16 M364 300 h16" class="ink thin" marker-end="url(#arr)"/>
+        `<g transform="translate(${252 + i * 48} 284)"><circle r="11" fill="${P(c)}" class="ink"/><circle r="15" class="ring" style="animation-delay:${i * 1.2}s"/><text y="27" text-anchor="middle" class="lbl s">${t}</text></g>`).join('')}
+      <path d="M268 284 h16 M316 284 h16 M364 284 h16" class="ink thin" marker-end="url(#arr)"/>
     </g>`, 11, 'Corte da pele mostrando um capilar rompido e as cores do hematoma');
 
   complaint.coriza = () => plate(460, 330, `

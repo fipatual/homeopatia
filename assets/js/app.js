@@ -17,7 +17,7 @@
   function route() {
     const id = (location.hash || '#historia').slice(1);
     const tab = tabs.includes(id) ? id : 'historia';
-    tabs.forEach(t => { $('#' + t).hidden = t !== tab; });
+    tabs.forEach(t => { $('#aba-' + t).hidden = t !== tab; });
     $$('.tabs a').forEach(a => a.dataset.tab === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
     document.body.dataset.tab = tab;
     if (tab !== 'historia') document.body.dataset.era = 'hahnemann';
@@ -251,7 +251,7 @@
   }
 
   function updateTimeline() {
-    if (!tl || $('#historia').hidden) { $('#yearMeter').classList.remove('show'); $('#tlDots').classList.remove('show'); return; }
+    if (!tl || $('#aba-historia').hidden) { $('#yearMeter').classList.remove('show'); $('#tlDots').classList.remove('show'); return; }
     const top = tl.box.getBoundingClientRect().top + scrollY;
     const front = scrollY + innerHeight * .78 - top; // até onde a planta cresce
     // plantas
@@ -285,7 +285,7 @@
   function buildScience() {
     if (sciBuilt) return; sciBuilt = true;
     $$('.art-slot').forEach(s => { const [g, k] = s.dataset.art.split('.'); s.innerHTML = A[g][k](); });
-    watch($('#ciencia'));
+    watch($('#aba-ciencia'));
     // escada
     const R = $('#ladderRange'); R.max = D.ladder.length - 1;
     const sup = n => String(n).replace(/-/g, '⁻').replace(/\d/g, d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
@@ -316,12 +316,18 @@
     if (ticking) return; ticking = true;
     requestAnimationFrame(() => {
       ticking = false;
-      $('.top').classList.toggle('compact', scrollY > 80);
+      // histerese: a diferença entre os limites (130px) é maior que o quanto o cabeçalho encolhe,
+      // então encolher nunca joga a rolagem de volta para o outro lado do limite (era o que fazia tremer)
+      const top = $('.top'), c = top.classList.contains('compact');
+      if (!c && scrollY > 160) top.classList.add('compact');
+      else if (c && scrollY < 30) top.classList.remove('compact');
       updateTimeline();
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   function debounce(f, t) { let h; return () => { clearTimeout(h); h = setTimeout(f, t); }; }
 
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   route();
+  window.addEventListener('load', () => { window.scrollTo(0, 0); onScroll(); });
 })();
