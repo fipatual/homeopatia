@@ -281,3 +281,45 @@ path.ink:not([fill]),.ink[fill=none]{fill:none}
 @keyframes dot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
 #ask button[disabled]{opacity:.6;cursor:wait}
 
+
+/* ── pranchas da Consulta (estilo gravura) ── */
+.bz1{animation:bz1 9s infinite}.bz2{animation:bz2 9s infinite}.bz3{animation:bz3 9s infinite}
+@keyframes bz1{0%,30%{opacity:1}45%,85%{opacity:0}100%{opacity:1}}
+@keyframes bz2{0%,25%{opacity:0}40%,55%{opacity:.75}70%,100%{opacity:0}}
+@keyframes bz3{0%,55%{opacity:0}70%,80%{opacity:.75}95%,100%{opacity:0}}
+.macro{animation:macro 2.6s ease-in-out infinite}
+@keyframes macro{50%{transform:scale(1.12,.92) rotate(6deg)}}
+.duct{transform-box:fill-box;animation:duct 2.4s linear infinite;opacity:0}
+@keyframes duct{0%{transform:translateY(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(130px);opacity:0}}
+.hand{transform-box:view-box;animation:spin 6s steps(60) infinite}
+.spark{animation:spark 1.6s infinite;opacity:0}
+@keyframes spark{0%,100%{opacity:0}10%,30%{opacity:1}}
+.bounce{transform-box:fill-box;animation:bounce 2.2s ease-in-out infinite}
+@keyframes bounce{0%{transform:translateY(-6px);opacity:.9}45%{transform:translateY(6px)}55%{transform:translateY(4px) rotate(-12deg)}100%{transform:translateY(-28px) rotate(-30deg);opacity:0}}
+.belch{transform-box:fill-box;animation:belch 4.5s ease-in infinite;opacity:0}
+@keyframes belch{0%,30%{transform:translateY(0);opacity:0}40%{opacity:.95}100%{transform:translateY(-70px) scale(.8);opacity:0}}
+.hplus{transform-box:fill-box;animation:hplus 3s ease-out infinite;opacity:0}
+@keyframes hplus{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-90px);opacity:0}}
+.pwave,.flow{display:none}
+@supports (offset-path: path('M0 0 L1 1')){
+  .pwave{display:inline;offset-rotate:auto;animation:pw 3.6s ease-in-out infinite}
+  .flow{display:inline;offset-rotate:0deg;animation:flow 3.2s ease-in-out infinite alternate}
+}
+@keyframes pw{0%{offset-distance:0%;opacity:0}15%,85%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes flow{from{offset-distance:0%}to{offset-distance:100%}}
+.cupula{transform-box:view-box;animation:cupula 3.2s ease-in-out infinite alternate}
+@keyframes cupula{from{transform:rotate(-11deg)}to{transform:rotate(11deg)}}
+.fluid{transform-box:fill-box;animation:fluid 3.2s ease-in-out infinite alternate}
+@keyframes fluid{from{transform:translateX(-6px) scaleX(-1)}to{transform:translateX(62px)}}
+.dilate{animation:dilate 3s ease-in-out infinite}
+@keyframes dilate{50%{transform:scaleY(1.5)}}
+.flash{animation:flash 1.2s ease-in-out infinite}
+@keyframes flash{50%{opacity:.2}}
+.plate-fig .art .lbl{font-size:11.5px}.plate-fig .art .lbl.s{font-size:9.5px}
+/* no celular a prancha fica maior e desliza para o lado, para as legendas continuarem legíveis */
+@media (max-width:760px){
+  .plate-fig{overflow-x:auto;-webkit-overflow-scrolling:touch;transform:none}
+  .plate-fig .art{min-width:640px}
+  .plate-fig figcaption{position:sticky;left:0;width:calc(100vw - 60px)}
+  .plate-fig figcaption::after{content:" · deslize para o lado ↔";font-style:normal;font-size:12px;opacity:.75}
+}
