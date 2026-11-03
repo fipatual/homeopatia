@@ -657,45 +657,212 @@
     ${labc(440, 300, 392, 330, ['a cúpula se dobra', 'com o líquido'], 'lbl s')}`, 67, 'Gravura: barco balançando no mar; ouvido interno com canais semicirculares, cóclea e nervo, com líquido em movimento; detalhe da cúpula se dobrando sobre as células ciliadas; olho e ouvido mandando sinais conflitantes ao cérebro');
   };
 
-  /* ═══════════════ PRINCÍPIOS (ícones) ═══════════════ */
+  /* ═══════════════ PRINCÍPIOS — vinhetas em estilo gravura ═══════════════
+     Mesmo tratamento das pranchas da Consulta: traço nítido, hachuras,
+     sem o filtro de lápis, com pequenas animações. */
   const principle = {};
-  const ico = (b, lbl) => `<svg viewBox="0 0 180 130" class="art icon" role="img" aria-label="${lbl}"><g filter="url(#pencil)">${b}</g></svg>`;
-  principle.similia = () => ico(`
-    <path d="M18 70 C18 104 44 116 56 116 C68 116 94 104 94 70" fill="${P('purple')}" class="ink"/>
-    ${[38, 28, 18, 8].map((r, i) => `<ellipse cx="56" cy="70" rx="${r}" ry="${r * .32}" fill="${i % 2 ? P('white') : P('violet')}" class="ink thin"/>`).join('')}
-    <path d="M100 58 h14 M100 66 h14" class="ink" stroke-width="2"/><path d="M98 54 q9 -10 18 0" class="ink thin"/>
-    <path d="M124 60 C134 48 160 48 170 60 C160 72 134 72 124 60Z" fill="${P('white')}" class="ink"/><circle cx="147" cy="60" r="8" fill="${P('blue')}" class="ink"/><circle cx="147" cy="60" r="3" fill="${INK}"/>
-    <path d="M130 70 c-2 6 -4 9 -4 11 a4 4 0 0 0 8 0 c0 -2 -2 -5 -4 -11z" fill="${P('sky')}" class="ink thin"/>`, 'Cebola e olho lacrimejando');
-  principle.experimentacao = () => ico(`
-    <path d="M20 40 L88 32 L88 112 L20 118Z" fill="${P('cream')}" class="ink"/><path d="M88 32 L156 40 L156 118 L88 112Z" fill="${P('white')}" class="ink"/>
-    ${[0, 1, 2, 3, 4, 5].map(i => script(28, 54 + i * 10, 54, 90 + i, .55)).join('')}
-    ${[0, 1, 2, 3, 4].map(i => script(96, 56 + i * 10, 52, 120 + i, .55)).join('')}
-    <path d="M150 10 L120 80" stroke="${PAL.brown}" stroke-width="3"/><path d="M150 10 C170 20 168 36 140 50" fill="${P('white')}" class="ink thin"/>
-    <rect x="162" y="78" width="12" height="34" rx="3" fill="${P('sky')}" class="ink"/><rect x="163" y="72" width="10" height="7" fill="${P('brown')}" class="ink thin"/>`, 'Diário de experimentação');
-  principle.dose = () => ico(`
-    ${[0, 1, 2, 3].map(i => `<g transform="translate(${24 + i * 40} ${92 - i * 20})"><path d="M-10 -24 h20 v8 c12 6 14 18 14 26 a24 24 0 0 1 -48 0 c0 -8 2 -20 14 -26z" fill="${P('white')}" class="ink"/><path d="M-22 6 a22 18 0 0 0 44 0z" fill="${PAL.purple}" opacity="${.85 - i * .25}"/></g>`).join('')}
-    ${[0, 1, 2].map(i => `<path d="M${40 + i * 40} ${80 - i * 20} q8 -16 18 -10" class="ink thin" marker-end="url(#arr)"/>`).join('')}
-    <rect x="128" y="104" width="44" height="12" rx="3" fill="${P('brown')}" class="ink"/>`, 'Escada de diluição');
-  principle.unico = () => ico(`
-    <path d="M60 116 h60 l-8 -14 h-44z" fill="${P('ochre')}" class="ink"/><path d="M70 102 h40 v-8 h-40z" fill="${P('gold')}" class="ink"/>
-    <rect x="78" y="36" width="24" height="58" rx="6" fill="${P('sky')}" class="ink"/><rect x="81" y="26" width="18" height="12" fill="${P('brown')}" class="ink"/>
-    <path d="M78 60 h24" class="ink thin"/>${script(80, 74, 20, 5, .4)}
-    <path d="M40 40 q-20 20 0 40 M140 40 q20 20 0 40 M30 30 q-30 30 0 60 M150 30 q30 30 0 60" class="ink thin" opacity=".6"/>`, 'Um só frasco num pedestal');
-  principle.individualizacao = () => ico(`
-    ${[['rose', 30, 0], ['teal', 90, 1], ['yellow', 150, 2]].map(([c, x, k]) => `<g transform="translate(${x} 0)">
-      ${k === 0 ? `<ellipse cx="0" cy="56" rx="22" ry="28" fill="${P(c)}" class="ink"/>` : k === 1 ? `<path d="M-18 84 L0 24 L18 84Z" fill="${P(c)}" class="ink"/>` : `<rect x="-20" y="34" width="40" height="50" rx="12" fill="${P(c)}" class="ink"/>`}
-      <circle cx="-6" cy="50" r="3" fill="${INK}"/><circle cx="6" cy="50" r="3" fill="${INK}"/>
-      <path d="M-8 84 l-2 30 h-8 M8 84 l2 30 h8" class="ink"/></g>`).join('')}
-    ${[30, 90, 150].map((x, i) => `<path d="M${x - 4} ${18 - i * 2} h8" class="ink" stroke-width="${2 + i}"/>`).join('')}`, 'Três criaturas diferentes');
-  principle.vital = () => ico(`
-    <path d="M90 14 a12 12 0 1 1 -0.1 0 M90 38 C70 40 62 60 64 80 L72 80 L74 118 L86 118 L88 90 L92 90 L94 118 L106 118 L108 80 L116 80 C118 60 110 40 90 38" fill="${P('cream')}" class="ink"/>
-    <path d="M90 62 m0 0 a3 3 0 0 1 6 0 a6 6 0 0 1 -12 0 a9 9 0 0 1 18 0 a12 12 0 0 1 -24 0 a15 15 0 0 1 30 0" fill="none" stroke="${PAL.orange}" stroke-width="2"/>
-    ${[...Array(10)].map((_, i) => `<path d="M${90 + Math.cos(i * .63) * 40} ${66 + Math.sin(i * .63) * 40} l${Math.cos(i * .63) * 10} ${Math.sin(i * .63) * 10}" stroke="${PAL.yellow}" stroke-width="2"/>`).join('')}`, 'Figura com espiral de energia');
-  principle.hering = () => ico(`
-    <path d="M90 14 a12 12 0 1 1 -0.1 0 M90 38 C70 40 62 60 64 80 L72 80 L74 118 L86 118 L88 90 L92 90 L94 118 L106 118 L108 80 L116 80 C118 60 110 40 90 38" fill="${P('skin')}" class="ink"/>
-    <circle cx="90" cy="62" r="7" fill="${P('red')}" class="ink thin"/>
-    <path d="M98 62 H140 M82 62 H40 M90 74 V118" class="ink" marker-end="url(#arr)"/>
-    <text x="150" y="60" class="lbl s">fora</text><text x="10" y="60" class="lbl s">fora</text><text x="100" y="124" class="lbl s">baixo</text>`, 'Setas de dentro para fora');
+  const ico = (b, lbl) => `<svg viewBox="0 0 240 160" class="art icon" role="img" aria-label="${lbl}">${b}</svg>`;
+  const ground = (cx, cy, rx) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${rx * .07}" fill="url(#p-shade)"/>`;
+  /* silhueta humana de frente, simétrica */
+  const bodyPath = 'M126 44 C138 45 148 50 151 60 L158 100 C159 106 154 108 152 104 L145 70 L143 96 C146 104 146 110 144 118 L141 150 L128 150 L122 108 L120 104 L118 108 L112 150 L99 150 L96 118 C94 110 94 104 97 96 L95 70 L88 104 C86 108 81 106 82 100 L89 60 C92 50 102 45 114 44 Z';
+  const figure = (fill, hatch = true) => {
+    const c = uid();
+    return `<defs><clipPath id="${c}"><path d="${bodyPath}"/><circle cx="120" cy="31" r="12"/></clipPath></defs>
+      <circle cx="120" cy="31" r="12" fill="${fill}" class="ink"/>
+      <path d="${bodyPath}" fill="${fill}" class="ink"/>
+      ${hatch ? hatchIn(c, 120, 20, 160, 150, 2.6, -55, .22) : ''}
+      <path d="M113 44 C116 47 124 47 127 44" class="ink thin"/><path d="M120 104 V84 M110 62 C114 66 126 66 130 62" class="ink thin" opacity=".5"/>`;
+  };
+  const vial = (x, y, liq, label = '', s = 1) => `<g transform="translate(${x} ${y}) scale(${s})">
+      <rect x="-9" y="-30" width="18" height="40" rx="5" fill="${PAL.white}" stroke="${INK}" stroke-width="1"/>
+      <rect x="-7.5" y="-12" width="15" height="20.5" rx="3.6" fill="${liq}" opacity=".75"/>
+      <rect x="-6" y="-38" width="12" height="9" rx="1.5" fill="${P('brown')}" stroke="${INK}" stroke-width=".8"/>
+      <path d="M-6 -34 h12" stroke="${INK}" stroke-width=".4"/>
+      <rect x="-8" y="-24" width="16" height="10" fill="${PAL.cream}" stroke="${INK}" stroke-width=".5"/>
+      ${label ? `<text y="-17" text-anchor="middle" style="font:italic 4.6px var(--fell);fill:${INK}">${label}</text>` : `<path d="M-5 -20 h10 M-4 -17 h8" stroke="${INK}" stroke-width=".4"/>`}
+      <path d="M-6 -27 V6" stroke="#fff" stroke-width="1.6" opacity=".7"/></g>`;
+
+  /* 1. Semelhante cura semelhante: cebola → lágrima; cebola diluída → coriza */
+  principle.similia = () => {
+    const cb = uid();
+    const rings = [34, 28, 22, 16, 10, 4].map((r, i) => `<ellipse cx="${52 - (34 - r) * .12}" cy="98" rx="${r}" ry="${r * .3}" fill="${i % 2 ? '#f7f1f6' : '#c9a8d6'}" stroke="${INK}" stroke-width="${i ? .5 : 1}"/>`).join('');
+    let irl = ''; for (let a = 0; a < 360; a += 15) { const t = a * Math.PI / 180; irl += `M${(160 + Math.cos(t) * 3.4).toFixed(1)} ${(46 + Math.sin(t) * 3.4).toFixed(1)} L${(160 + Math.cos(t) * 8.6).toFixed(1)} ${(46 + Math.sin(t) * 8.6).toFixed(1)} `; }
+    return ico(`<defs><clipPath id="${cb}"><path d="M18 98 C16 126 36 140 52 140 C68 140 88 126 86 98Z"/></clipPath></defs>
+    ${ground(52, 146, 40)}${ground(204, 146, 20)}
+    <path d="M18 98 C16 126 36 140 52 140 C68 140 88 126 86 98Z" fill="${P('purple')}" class="ink"/>
+    ${hatchIn(cb, 52, 98, 88, 140, 2.2, -35, .3)}
+    <path d="M30 104 Q34 126 52 138 M74 104 Q70 126 52 138 M52 102 V138" stroke="${INK}" stroke-width=".45" opacity=".45" fill="none"/>
+    ${[...Array(9)].map((_, i) => `<path d="M${46 + i * 1.5} 140 q${-4 + i} 6 ${-6 + i * 1.6} 10" stroke="${PAL.ochre}" stroke-width=".6" fill="none"/>`).join('')}
+    <ellipse cx="52" cy="98" rx="35.5" ry="11" fill="${P('ochre')}" stroke="${INK}" stroke-width=".9"/>${rings}
+    <g class="anim">${[0, 1, 2].map(i => `<path class="vap2" style="animation-delay:${i * .9}s" d="M${44 + i * 8} 88 c-4 -5 4 -9 0 -14 s4 -9 0 -14" fill="none" stroke="${PAL.violet}" stroke-width="1.3" stroke-linecap="round"/>`).join('')}</g>
+    <!-- olho que lacrimeja -->
+    <path d="M132 46 C144 30 176 30 188 46 C176 60 144 60 132 46Z" fill="${PAL.white}" class="ink"/>
+    <circle cx="160" cy="46" r="9" fill="#4f78b8" stroke="${INK}" stroke-width=".7"/><path d="${irl}" stroke="#23406f" stroke-width=".5"/><circle cx="160" cy="46" r="3.6" fill="#15110d"/><circle cx="157.6" cy="43.4" r="1.4" fill="#fff"/>
+    <path d="M132 46 C144 30 176 30 188 46" fill="none" stroke="${INK}" stroke-width="1.6"/>
+    ${[...Array(9)].map((_, i) => { const t = .12 + i * .095, x = 132 + 56 * t, y = 46 - 18 * Math.sin(Math.PI * t); return `<path d="M${x.toFixed(1)} ${y.toFixed(1)} l${(-1.5 + i * .4).toFixed(1)} -4.5" class="ink thin" stroke-width=".6"/>`; }).join('')}
+    <g class="anim"><path class="tear2" d="M138 54 c-1.6 3.4 -2.8 5 -2.8 6.6 a2.8 2.8 0 0 0 5.6 0 c0 -1.6 -1.2 -3.2 -2.8 -6.6z" fill="#a9cde6" stroke="${INK}" stroke-width=".5"/></g>
+    <!-- seta ornamental -->
+    <path d="M84 78 C96 50 112 44 126 46" fill="none" stroke="${INK}" stroke-width=".9" marker-end="url(#arr)"/>
+    <text x="96" y="40" text-anchor="middle" class="lbl s" style="font-size:8.5px">provoca</text>
+    <!-- frasco com a cebola diluída -->
+    ${vial(204, 136, PAL.violet, 'Allium cepa', 1.15)}
+    <path d="M168 62 C186 70 198 80 202 92" fill="none" stroke="${INK}" stroke-width=".9" stroke-dasharray="2.6 2" marker-end="url(#arr)"/>
+    <text x="214" y="70" text-anchor="middle" class="lbl s" style="font-size:8.5px">trataria</text>
+    <text x="52" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">cebola: faz lacrimejar</text>
+    <text x="204" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">diluída: p/ coriza</text>`, 'Gravura: a cebola provoca lágrimas; a cebola diluída, num frasco, seria usada para coriza');
+  };
+
+  /* 2. Experimentação no ser humano saudável: o diário */
+  principle.experimentacao = () => {
+    let rl = ''; for (let i = 0; i < 9; i++) rl += `M46 ${62 + i * 8.4} L114 ${58 + i * 8.4} M126 ${58 + i * 8.4} L194 ${62 + i * 8.4} `;
+    const barbs = [...Array(14)].map((_, i) => { const t = i / 14, x = 214 - t * 40, y = 10 + t * 56; return `M${x.toFixed(1)} ${y.toFixed(1)} l${(6 - t * 3).toFixed(1)} ${(-2 + t).toFixed(1)} M${x.toFixed(1)} ${y.toFixed(1)} l${(-3 + t).toFixed(1)} ${(4 - t).toFixed(1)}`; }).join(' ');
+    return ico(`${ground(120, 146, 92)}
+    <!-- livro aberto -->
+    <path d="M30 52 L120 44 L120 140 L30 146Z" fill="${P('brown')}" class="ink"/><path d="M120 44 L210 52 L210 146 L120 140Z" fill="${P('brown')}" class="ink"/>
+    <path d="M36 50 Q78 40 118 48 L118 136 Q78 128 36 140Z" fill="${PAL.white}" class="ink thin"/>
+    <path d="M122 48 Q162 40 204 50 L204 140 Q162 128 122 136Z" fill="${PAL.white}" class="ink thin"/>
+    ${SH('M106 46 Q113 46 118 48 L118 136 Q113 134 106 133Z')}${SH('M122 48 Q127 46 134 46 L134 133 Q127 134 122 136Z')}
+    <path d="${rl}" stroke="${PAL.sky}" stroke-width=".5" opacity=".8" fill="none"/>
+    <text x="50" y="58" class="lbl s" style="font-size:7.5px">dia 1</text><text x="130" y="56" class="lbl s" style="font-size:7.5px">dia 2</text>
+    ${[0, 1, 2, 3, 4, 5, 6].map(i => script(48, 68 + i * 8.4 - i * .45, 62 - (i % 3) * 8, 300 + i, .32)).join('')}
+    ${[0, 1, 2].map(i => script(128, 66 + i * 8.4 + i * .45, 60 - i * 10, 320 + i, .32)).join('')}
+    <!-- pequeno esboço: termômetro e lua (sono) -->
+    <g transform="translate(150 106)"><rect x="-2" y="-16" width="4" height="22" rx="2" fill="${PAL.white}" stroke="${INK}" stroke-width=".5"/><circle cy="8" r="3.6" fill="${PAL.red}" stroke="${INK}" stroke-width=".5"/><rect x="-1" y="-6" width="2" height="12" fill="${PAL.red}"/></g>
+    <path d="M178 98 a8 8 0 1 0 8 12 a6 6 0 1 1 -8 -12z" fill="${P('yellow')}" stroke="${INK}" stroke-width=".6"/>
+    <path d="M142 128 c6 -2 10 2 16 0" stroke="${INK}" stroke-width=".5" fill="none"/>
+    <!-- linha sendo escrita -->
+    <g class="anim"><path class="writeline" d="M128 ${66 + 3 * 8.4} c3 -4 5 3 8 0 s5 -4 8 0 s5 3 8 0 s4 -4 8 0" stroke="${INK}" stroke-width=".7" fill="none" pathLength="1"/>
+    <!-- pena -->
+    <g class="quill"><path d="M174 66 C186 40 204 18 222 8 C214 24 200 48 176 68Z" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/>
+      <path d="${barbs}" stroke="${INK}" stroke-width=".35" opacity=".6"/>
+      <path d="M222 8 C200 30 186 50 172 72" stroke="${PAL.brown}" stroke-width="1.2" fill="none"/><path d="M172 72 l-3 6" stroke="${INK}" stroke-width="1.2"/></g></g>
+    <!-- tinteiro e frasco -->
+    <path d="M206 132 h22 v10 c0 4 -22 4 -22 0z" fill="${P('gray')}" class="ink"/><ellipse cx="217" cy="132" rx="11" ry="3" fill="#2a2420" stroke="${INK}" stroke-width=".6"/>
+    ${vial(22, 140, PAL.sky)}
+    <text x="120" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">tudo o que o voluntário sentir vai para o diário</text>`, 'Gravura: diário aberto de experimentação com anotações, uma pena escrevendo, tinteiro e frasco');
+  };
+
+  /* 3. Dose mínima e dinamização: a escada */
+  principle.dose = () => {
+    const steps = [[30, 130], [86, 112], [142, 94], [198, 76]];
+    const dots = [14, 6, 2, 0]; const r = rng(77);
+    const flask = (x, y, i) => {
+      const c = uid(); let d = '';
+      for (let k = 0; k < dots[i]; k++) { const a = r() * 6.28, rr = Math.sqrt(r()) * 9; d += `<circle cx="${(x + Math.cos(a) * rr).toFixed(1)}" cy="${(y - 12 + Math.sin(a) * rr * .6).toFixed(1)}" r="1.3" fill="${PAL.purple}"/>`; }
+      return `<defs><clipPath id="${c}"><circle cx="${x}" cy="${y - 13}" r="13"/></clipPath></defs>
+        <path d="M${x - 4} ${y - 40} h8 v12 c8 3 10 9 10 15 a14 14 0 0 1 -28 0 c0 -6 2 -12 10 -15z" fill="${PAL.white}" class="ink"/>
+        <rect x="${x - 15}" y="${y - 18}" width="30" height="20" fill="#b89ad0" opacity="${[.9, .55, .3, .12][i]}" clip-path="url(#${c})"/>${d}
+        <path d="M${x - 9} ${y - 22} a10 10 0 0 0 -1 12" stroke="#fff" stroke-width="1.4" fill="none" opacity=".8"/>
+        <rect x="${x - 5}" y="${y - 44}" width="10" height="6" rx="1" fill="${P('brown')}" stroke="${INK}" stroke-width=".6"/>`;
+    };
+    return ico(`
+    <!-- degraus de madeira -->
+    <path d="M6 132 H58 V114 H114 V96 H170 V78 H234 V150 H6Z" fill="${P('ochre')}" class="ink"/>
+    ${XH('M6 140 H234 V150 H6Z')}<path d="M6 140 H234" class="ink thin"/>
+    ${[[58, 114, 132], [114, 96, 114], [170, 78, 96]].map(([x, y1, y2]) => `<path d="M${x} ${y1} V${y2}" fill="none" stroke="${INK}" stroke-width=".5"/>${SH(`M${x - 6} ${y1} H${x} V${y2} H${x - 6}Z`)}`).join('')}
+    ${steps.map(([x, y], i) => flask(x, y, i)).join('')}
+    <!-- conta-gotas entre os frascos -->
+    ${[0, 1, 2].map(i => { const [x0, y0] = steps[i], [x1, y1] = steps[i + 1]; return `<path d="M${x0 + 8} ${y0 - 48} C${x0 + 20} ${y0 - 66} ${x1 - 16} ${y1 - 70} ${x1 - 2} ${y1 - 52}" fill="none" stroke="${INK}" stroke-width=".7" stroke-dasharray="2 2" marker-end="url(#arr)"/>
+      <text x="${(x0 + x1) / 2 + 2}" y="${(y0 + y1) / 2 - 62}" text-anchor="middle" class="lbl s" style="font-size:7.5px">1 : 100</text>`; }).join('')}
+    <g class="anim">${[1, 2, 3].map(i => `<path class="drip2" style="animation-delay:${i * .6}s" d="M${steps[i][0]} ${steps[i][1] - 56} c-1.4 3 -2.4 4.4 -2.4 5.6 a2.4 2.4 0 0 0 4.8 0 c0 -1.2 -1 -2.6 -2.4 -5.6z" fill="#b89ad0" stroke="${INK}" stroke-width=".4"/>`).join('')}</g>
+    ${['TM', '1C', '2C', '… 30C'].map((t, i) => `<text x="${steps[i][0]}" y="${steps[i][1] + 10}" text-anchor="middle" style="font:italic 9px var(--fell);fill:${INK}">${t}</text>`).join('')}
+    <text x="234" y="158" text-anchor="end" class="lbl s" style="font-size:8.5px">cada vez menos substância</text>`, 'Gravura: escada de madeira com frascos de diluição cada vez mais claros, da tintura-mãe a 30C');
+  };
+
+  /* 4. Medicamento único: um frasco sob a redoma */
+  principle.unico = () => {
+    const c = uid();
+    return ico(`<defs>${grad(c, [[0, '#ffffff', .55], [1, '#dfeaf0', .2]])}</defs>
+    ${ground(150, 146, 52)}${ground(46, 146, 30)}
+    <!-- várias misturas (riscadas) -->
+    ${vial(32, 138, PAL.green, '', .85)}${vial(48, 136, PAL.orange, '', .85)}${vial(64, 138, PAL.rose, '', .85)}
+    <path d="M28 120 C40 126 56 126 68 120" stroke="${PAL.red}" stroke-width=".8" fill="none"/>
+    <path d="M20 96 L76 142 M76 96 L20 142" stroke="${PAL.red}" stroke-width="1.6" opacity=".7"/>
+    <text x="48" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">misturas</text>
+    <!-- pedestal -->
+    <path d="M108 140 H192 L186 132 H114Z" fill="${P('gold')}" class="ink"/>${SH('M170 132 H186 L192 140 H176Z')}
+    <rect x="118" y="124" width="64" height="8" rx="2" fill="${P('ochre')}" class="ink"/>
+    <path d="M122 128 h56" stroke="${INK}" stroke-width=".4"/>${[0, 1, 2, 3, 4, 5, 6].map(i => `<circle cx="${126 + i * 8}" cy="136" r="1.2" fill="${INK}" opacity=".6"/>`).join('')}
+    <!-- frasco -->
+    ${vial(150, 108, PAL.sky, 'um só', 1.5)}
+    <!-- redoma de vidro -->
+    <path d="M116 124 V62 C116 30 184 30 184 62 V124" fill="url(#${c})" stroke="${INK}" stroke-width="1"/>
+    <path d="M144 26 h12 v6 h-12z" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/><circle cx="150" cy="22" r="4.5" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/>
+    <path d="M114 124 H186" stroke="${INK}" stroke-width="1.4"/>
+    <g class="anim"><path class="shine" d="M124 112 V64 C124 48 134 40 144 38" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+    <path d="M176 100 V64 C176 54 172 48 166 44" stroke="${INK}" stroke-width=".4" fill="none" opacity=".5"/>
+    <text x="150" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">um medicamento por vez</text>`, 'Gravura: três frascos misturados riscados ao lado de um único frasco sob uma redoma de vidro');
+  };
+
+  /* 5. Individualização: três criaturas, três “gripes” diferentes */
+  principle.individualizacao = () => {
+    const legs = (x, y, shoe) => `<path d="M${x - 7} ${y} C${x - 8} ${y + 10} ${x - 10} ${y + 18} ${x - 9} ${y + 26} M${x + 7} ${y} C${x + 8} ${y + 10} ${x + 9} ${y + 18} ${x + 8} ${y + 26}" stroke="${INK}" stroke-width="3.6" fill="none"/>
+      <path d="M${x - 7} ${y} C${x - 8} ${y + 10} ${x - 10} ${y + 18} ${x - 9} ${y + 26} M${x + 7} ${y} C${x + 8} ${y + 10} ${x + 9} ${y + 18} ${x + 8} ${y + 26}" stroke="${PAL.skin}" stroke-width="2.4" fill="none"/>
+      <path d="M${x - 15} ${y + 30} C${x - 16} ${y + 25} ${x - 7} ${y + 24} ${x - 5} ${y + 28} V${y + 31} H${x - 15}Z M${x + 4} ${y + 28} C${x + 6} ${y + 24} ${x + 16} ${y + 25} ${x + 15} ${y + 30} V${y + 31} H${x + 4}Z" fill="${shoe}" stroke="${INK}" stroke-width=".7"/>`;
+    const eye = (x, y) => `<circle cx="${x}" cy="${y}" r="2.6" fill="#fff" stroke="${INK}" stroke-width=".5"/><circle cx="${x + .5}" cy="${y + .4}" r="1.2" fill="${INK}"/>`;
+    const c1 = uid(), c2 = uid(), c3 = uid();
+    let spikes = ''; const r = rng(5);
+    for (let i = 0; i < 26; i++) { const a = -3.0 + i * .12, x = 42 + Math.cos(a) * 24, y = 84 + Math.sin(a) * 22; spikes += `M${x.toFixed(1)} ${y.toFixed(1)} l${(Math.cos(a) * (6 + r() * 6)).toFixed(1)} ${(Math.sin(a) * (6 + r() * 6)).toFixed(1)} `; }
+    const blobs = [[200, 76, '#d94a4a'], [214, 78, '#4f78b8'], [194, 90, '#e9bd34'], [208, 92, '#5f8f34'], [222, 92, '#e07b39'], [201, 104, '#a98bc9'], [216, 104, '#d94a4a']];
+    return ico(`<defs><clipPath id="${c1}"><ellipse cx="42" cy="88" rx="24" ry="22"/></clipPath><clipPath id="${c2}"><path d="M102 112 C100 80 110 50 120 34 C130 50 140 80 138 112Z"/></clipPath><clipPath id="${c3}"><rect x="182" y="66" width="52" height="48" rx="12"/></clipPath></defs>
+    ${ground(42, 146, 26)}${ground(120, 146, 24)}${ground(208, 146, 28)}
+    <g class="anim">
+    <g class="bob" style="animation-delay:0s">
+      ${legs(42, 108, PAL.red)}
+      <ellipse cx="42" cy="88" rx="24" ry="22" fill="${P('rose')}" class="ink"/><path d="${spikes}" stroke="#b3475a" stroke-width=".9" fill="none"/>
+      ${hatchIn(c1, 42, 88, 66, 110, 2.2, -40, .3)}${eye(36, 84)}${eye(48, 84)}<path d="M38 94 q4 -3 8 0" class="ink thin"/>
+      <g transform="translate(18 44)"><path d="M0 0 h16 a4 4 0 0 1 4 4 v8 a4 4 0 0 1 -4 4 h-8 l-4 4 v-4 h-4 a4 4 0 0 1 -4 -4 v-8 a4 4 0 0 1 4 -4z" fill="#fff" stroke="${INK}" stroke-width=".6"/>
+        ${[0, 60, 120].map(a => `<path d="M8 3 V13" transform="rotate(${a} 8 8)" stroke="${PAL.blue}" stroke-width="1"/>`).join('')}</g></g>
+    <g class="bob" style="animation-delay:.4s">
+      ${legs(120, 112, PAL.blue)}
+      <path d="M102 112 C100 80 110 50 120 34 C130 50 140 80 138 112Z" fill="${P('teal')}" class="ink"/>
+      <g clip-path="url(#${c2})">${[48, 62, 76, 90, 104].map(y => `<path d="M96 ${y} Q120 ${y + 6} 144 ${y}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".8"/>`).join('')}</g>
+      ${hatchIn(c2, 130, 70, 140, 112, 2.2, -50, .3)}${eye(115, 70)}${eye(126, 70)}<path d="M116 80 q4 3 8 0" class="ink thin"/>
+      <g transform="translate(140 28)"><path d="M0 0 h16 a4 4 0 0 1 4 4 v8 a4 4 0 0 1 -4 4 h-8 l-4 4 v-4 h-4 a4 4 0 0 1 -4 -4 v-8 a4 4 0 0 1 4 -4z" fill="#fff" stroke="${INK}" stroke-width=".6"/>
+        <path d="M8 13 c-3 0 -4 -3 -2 -6 c1 2 2 2 2 -2 c3 2 4 6 2 8z" fill="${PAL.orange}" stroke="${INK}" stroke-width=".4"/></g></g>
+    <g class="bob" style="animation-delay:.8s">
+      ${legs(208, 112, PAL.green)}
+      <rect x="182" y="66" width="52" height="48" rx="12" fill="#55524c" class="ink"/>
+      ${blobs.map(([x, y, col]) => `<rect x="${x - 6}" y="${y - 4}" width="12" height="8" rx="3" fill="${col}" stroke="${INK}" stroke-width=".4"/>`).join('')}
+      ${hatchIn(c3, 220, 90, 234, 114, 2, -50, .35)}
+      <path d="M190 66 l-4 -10 l-4 2 M190 66 l2 -12 M228 66 l4 -10 l4 2" stroke="${PAL.ochre}" stroke-width="1.4" fill="none"/>
+      <g transform="translate(176 32)"><path d="M0 0 h16 a4 4 0 0 1 4 4 v8 a4 4 0 0 1 -4 4 h-4 l-4 4 v-4 h-8 a4 4 0 0 1 -4 -4 v-8 a4 4 0 0 1 4 -4z" fill="#fff" stroke="${INK}" stroke-width=".6"/>
+        <path d="M8 3 c-2 4 -3.4 5.6 -3.4 7.2 a3.4 3.4 0 0 0 6.8 0 c0 -1.6 -1.4 -3.2 -3.4 -7.2z" fill="${PAL.sky}" stroke="${INK}" stroke-width=".4"/></g></g>
+    </g>
+    <text x="42" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">sente frio</text>
+    <text x="120" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">sente calor</text>
+    <text x="208" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">tem muita sede</text>`, 'Gravura: três criaturas fantásticas com a mesma gripe, uma sentindo frio, outra calor e outra sede');
+  };
+
+  /* 6. Força vital */
+  principle.vital = () => {
+    let rays = '';
+    for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283, L = i % 2 ? 10 : 18, r0 = 50; rays += `<path d="M${(120 + Math.cos(a) * r0).toFixed(1)} ${(84 + Math.sin(a) * r0 * .92).toFixed(1)} L${(120 + Math.cos(a) * (r0 + L)).toFixed(1)} ${(84 + Math.sin(a) * (r0 + L) * .92).toFixed(1)}" stroke="${i % 2 ? PAL.yellow : PAL.gold}" stroke-width="${i % 2 ? 1 : 1.8}" stroke-linecap="round"/>`; }
+    let sp = 'M120 76 '; for (let t = 0; t < 18.8; t += .3) { const r = 1 + t * .9; sp += `L${(120 + Math.cos(t) * r).toFixed(1)} ${(76 + Math.sin(t) * r * .95).toFixed(1)} `; }
+    return ico(`${ground(120, 152, 34)}
+    <ellipse cx="120" cy="84" rx="56" ry="52" fill="none" stroke="${PAL.gold}" stroke-width=".7" stroke-dasharray="1.4 3"/>
+    <g class="anim"><g class="glow" style="transform-origin:120px 84px">${rays}</g></g>
+    ${figure(PAL.cream)}
+    <g class="anim"><g class="spinslow" style="transform-origin:120px 76px"><path d="${sp}" stroke="${PAL.orange}" stroke-width="1.3" fill="none"/></g></g>
+    <circle cx="120" cy="76" r="3" fill="${PAL.gold}" stroke="${INK}" stroke-width=".5"/>
+    <text x="120" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">vitalismo: ideia do século XVIII</text>`, 'Gravura: figura humana com uma espiral luminosa no peito e raios em volta, representando a força vital');
+  };
+
+  /* 7. Lei de cura de Hering */
+  principle.hering = () => {
+    const out = [[150, 62, 196, 50], [150, 84, 200, 88], [90, 62, 44, 50], [90, 84, 40, 88]];
+    return ico(`${ground(120, 152, 34)}
+    ${figure(PAL.skin)}
+    <!-- órgãos internos -->
+    <path d="M114 66 c-6 -6 -14 2 -6 10 l8 8 l8 -8 c8 -8 0 -16 -6 -10 l-2 2z" fill="${PAL.red}" stroke="${INK}" stroke-width=".7" transform="translate(4 -4) scale(.9)" style="transform-origin:120px 74px"/>
+    <path d="M106 70 C100 74 100 86 106 92 M134 70 C140 74 140 86 134 92" stroke="#c98b96" stroke-width="3" fill="none" opacity=".6"/>
+    <!-- setas de dentro para fora -->
+    <g class="anim">${out.map(([x1, y1, x2, y2]) => `<path class="flowdash" d="M${x1 - (x1 > 120 ? 20 : -20)} ${y1 + 6} L${x2} ${y2}" stroke="${PAL.red}" stroke-width="1.4" fill="none" stroke-dasharray="3 3" marker-end="url(#arr)"/>`).join('')}
+      <path class="flowdash" d="M164 40 C176 70 176 110 160 150" stroke="${PAL.blue}" stroke-width="1.4" fill="none" stroke-dasharray="3 3" marker-end="url(#arr)"/></g>
+    <text x="214" y="40" text-anchor="middle" class="lbl s" style="font-size:8px">para fora</text><text x="26" y="40" text-anchor="middle" class="lbl s" style="font-size:8px">para fora</text>
+    <text x="198" y="128" text-anchor="middle" class="lbl s" style="font-size:8px">de cima</text><text x="198" y="138" text-anchor="middle" class="lbl s" style="font-size:8px">para baixo</text>
+    <text x="120" y="158" text-anchor="middle" class="lbl s" style="font-size:8.5px">dos órgãos para a pele</text>`, 'Gravura: figura humana com coração no peito e setas saindo de dentro para fora e descendo de cima para baixo');
+  };
 
   /* ═══════════════ HISTÓRIA ═══════════════ */
   const history = {};
