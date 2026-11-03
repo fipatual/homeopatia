@@ -1157,51 +1157,94 @@
 
   /* ─── 2 · Sacudir faz diferença? ─── */
   science.sucussao = () => {
-    const cb = uid(), cv = uid();
+    const cb = uid(), cv = uid(), sk = uid(), sk2 = uid(), cl = uid(), ch = uid(), gl = uid(), lt = uid();
     // grade 1:99 em gotas
     let grid = '';
     for (let i = 0; i < 100; i++) { const x = 330 + (i % 10) * 16, y = 74 + Math.floor(i / 10) * 15, on = i === 44;
       grid += `<path d="M${x} ${y - 5.5} c-2.6 4 -4.2 6 -4.2 7.6 a4.2 4.2 0 0 0 8.4 0 c0 -1.6 -1.6 -3.6 -4.2 -7.6z" fill="${on ? '#8a5fb0' : '#bcd9ec'}" stroke="${INK}" stroke-width="${on ? .8 : .4}"/>`; }
     const mini = (x, y, a) => `<path d="M${x - 3} ${y - 22} h6 v8 c6 3 8 7 8 11 a11 11 0 0 1 -22 0 c0 -4 2 -8 8 -11z" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/><path d="M${x - 10} ${y - 1} a11 9 0 0 0 20 0z" fill="#8a5fb0" opacity="${a}"/>`;
-    return plate(SW, 340, `<defs><clipPath id="${cb}"><path d="M30 246 L196 214 L262 236 L96 270Z"/></clipPath>
-      <clipPath id="${cv}"><rect x="128" y="96" width="30" height="104" rx="8"/></clipPath></defs>
+
+    /* ── mão direita segurando o frasco, vista pelas costas dos dedos ── */
+    const VX = 150; // eixo do frasco
+    // dedos: [topo, altura, x da ponta, x do nó]
+    const F = [[112, 17, 131, 196], [129, 17, 129, 199], [146, 16, 131, 198], [162, 14, 136, 193]];
+    const finger = ([y, h, xt, xk], i) => {
+      const yb = y + h, sag = 3;
+      const d = `M${xk} ${y + 1} C${xk - 20} ${y + sag + 1} ${xt + 26} ${y + sag} ${xt + 8} ${y} C${xt + 1} ${y} ${xt - 3} ${y + h * .35} ${xt - 2} ${y + h * .55} C${xt - 1} ${yb - 2} ${xt + 3} ${yb + sag * .4} ${xt + 10} ${yb + sag * .6} C${xt + 30} ${yb + sag + 1} ${xk - 20} ${yb + sag + 1} ${xk} ${yb}Z`;
+      return `<path d="${d}" fill="url(#${sk})" stroke="${INK}" stroke-width="1"/>
+        <path d="M${xt + 12} ${yb + sag * .6 - 1.4} C${xt + 30} ${yb + sag} ${xk - 22} ${yb + sag} ${xk - 4} ${yb - 1.2}" stroke="#b8775a" stroke-width="2.2" fill="none" opacity=".45"/>
+        <path d="M${xt + 6} ${y + 3} C${xt + 22} ${y + 5.2} ${xk - 30} ${y + 5.4} ${xk - 14} ${y + 3.4}" stroke="#fff" stroke-width="1.6" fill="none" opacity=".5"/>
+        <path d="M${xt + 24 + i} ${y + 3} c-2 ${h * .3} -2 ${h * .6} 0 ${h - 2} M${xt + 27 + i} ${y + 4} c-1.4 ${h * .3} -1.4 ${h * .55} 0 ${h - 4}" stroke="${INK}" stroke-width=".55" fill="none" opacity=".7"/>
+        <path d="M${xk - 22} ${y + 3} c-2 ${h * .3} -2 ${h * .6} 0 ${h - 2}" stroke="${INK}" stroke-width=".5" fill="none" opacity=".55"/>`;
+    };
+    const lace = [...Array(9)].map((_, i) => { const t = i / 8, x = 228 + t * 34, y = 66 + t * 26; return `M${x.toFixed(1)} ${y.toFixed(1)} a3 3 0 0 0 -4.4 4.6`; }).join(' ');
+    const ruff = [...Array(8)].map((_, i) => { const t = i / 7, x = 224 + t * 36, y = 70 + t * 28; return `M${x.toFixed(1)} ${y.toFixed(1)} q-6 2 -9 8`; }).join(' ');
+
+    return plate(SW, 340, `<defs>
+      <clipPath id="${cb}"><path d="M30 246 L196 214 L262 236 L96 270Z"/></clipPath>
+      <clipPath id="${cv}"><rect x="${VX - 16}" y="66" width="32" height="140" rx="9"/></clipPath>
+      <linearGradient id="${sk}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7d9bf"/><stop offset=".55" stop-color="#eebf9b"/><stop offset="1" stop-color="#d99a76"/></linearGradient>
+      <linearGradient id="${sk2}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f3cfb1"/><stop offset="1" stop-color="#d5946f"/></linearGradient>
+      <linearGradient id="${gl}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".9"/><stop offset=".25" stop-color="#eef4f8" stop-opacity=".6"/><stop offset=".8" stop-color="#dfe9f0" stop-opacity=".5"/><stop offset="1" stop-color="#b9cbd8" stop-opacity=".8"/></linearGradient>
+      <linearGradient id="${lt}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c6a6dc"/><stop offset=".6" stop-color="#9a72bf"/><stop offset="1" stop-color="#6f4a93"/></linearGradient>
+      <clipPath id="${cl}"><path d="M232 60 L294 20 L320 50 L262 92Z"/></clipPath>
+      <clipPath id="${ch}"><path d="M188 98 C206 94 218 110 218 132 C218 158 208 176 188 182Z"/></clipPath></defs>
+
     <!-- mesa -->
     <path d="M14 286 H300" class="ink thin"/>${[...Array(6)].map((_, i) => `<path d="M${18 + i * 46} ${292 + (i % 2) * 6} c12 -3 24 3 36 0" class="ink thin" opacity=".35"/>`).join('')}
     <ellipse cx="146" cy="286" rx="132" ry="5" fill="url(#p-shade)"/>
     <!-- livro encadernado em couro -->
-    <path d="M96 270 L262 236 L262 252 L96 286Z" fill="#efe3c6" class="ink"/>
-    ${[0, 1, 2, 3, 4].map(i => `<path d="M98 ${273 + i * 2.6} L260 ${239 + i * 2.6}" stroke="${INK}" stroke-width=".35" opacity=".6"/>`).join('')}
-    <path d="M30 246 L96 270 L96 286 L30 262Z" fill="${P('red')}" class="ink"/>
-    ${[0, 1, 2].map(i => `<path d="M${42 + i * 18} ${250 + i * 6.5} v16" stroke="${PAL.gold}" stroke-width="2.2"/>`).join('')}
-    <path d="M30 246 L196 214 L262 236 L96 270Z" fill="#8e3b2c" class="ink"/>
-    ${hatchIn(cb, 146, 242, 262, 270, 2.4, -20, .25)}
+    <path d="M96 270 L262 236 L262 252 L96 286Z" fill="#f1e6cb" stroke="${INK}" stroke-width="1"/>
+    ${[...Array(7)].map((_, i) => `<path d="M98 ${272.4 + i * 2} L260 ${238.4 + i * 2}" stroke="${INK}" stroke-width=".3" opacity=".55"/>`).join('')}
+    <path d="M96 270 L262 236" stroke="${PAL.gold}" stroke-width="1.2"/>
+    <path d="M30 246 L96 270 L96 286 L30 262Z" fill="#7a2f22" stroke="${INK}" stroke-width="1"/>
+    ${[0, 1, 2, 3].map(i => `<path d="M${38 + i * 15} ${249 + i * 5.4} v15" stroke="#5a2016" stroke-width="3.4"/><path d="M${38 + i * 15} ${249 + i * 5.4} v15" stroke="${PAL.gold}" stroke-width="1"/>`).join('')}
+    <path d="M30 246 L196 214 L262 236 L96 270Z" fill="#8e3b2c" stroke="${INK}" stroke-width="1.1"/>
+    ${hatchIn(cb, 146, 242, 262, 270, 2.2, -20, .22)}
     <path d="M44 246 L192 218 L246 236 L98 264Z" fill="none" stroke="${PAL.gold}" stroke-width="1.2"/>
-    <path d="M52 246 L190 221 L238 236 L100 260Z" fill="none" stroke="${PAL.gold}" stroke-width=".5"/>
-    <g transform="translate(146 242) scale(1 .45) rotate(-14)">${flower(0, 0, 10, 8, 'gold', 'gold')}</g>
-    <path d="M30 246 l12 -2 l-3 9z M262 236 l-12 0 l4 -8z" fill="${PAL.gold}" stroke="${INK}" stroke-width=".5"/>
-    <!-- mão + frasco (sacudindo) -->
-    <g class="anim"><g class="shake" style="transform-origin:143px 230px">
-      <rect x="128" y="96" width="30" height="104" rx="8" fill="${PAL.white}" stroke="${INK}" stroke-width="1.1"/>
-      <g clip-path="url(#${cv})"><rect x="128" y="136" width="30" height="66" fill="#b89ad0" opacity=".65"/>
-        <path d="M128 136 q7 -4 15 0 t15 0" fill="none" stroke="#fff" stroke-width="1"/>
-        ${[[136, 150], [146, 166], [140, 182], [150, 146]].map(([x, y], i) => `<circle class="bub" style="animation-delay:${i * .3}s" cx="${x}" cy="${y}" r="1.8" fill="#fff" fill-opacity=".6" stroke="${INK}" stroke-width=".3"/>`).join('')}</g>
-      <path d="M134 102 V194" stroke="#fff" stroke-width="2.4" opacity=".8"/>
-      <rect x="130" y="82" width="26" height="16" rx="2" fill="${P('brown')}" stroke="${INK}"/><path d="M130 88 h26 M130 93 h26" stroke="${INK}" stroke-width=".4"/>
-      <rect x="132" y="106" width="22" height="18" fill="${PAL.cream}" stroke="${INK}" stroke-width=".6"/><text x="143" y="118" text-anchor="middle" style="font:italic 7px var(--fell);fill:${INK}">1C</text>
+    <path d="M54 246 L190 221 L236 236 L100 259Z" fill="none" stroke="${PAL.gold}" stroke-width=".5"/>
+    <g transform="translate(146 241) scale(1 .42) rotate(-14)">${flower(0, 0, 11, 10, 'gold', 'gold')}</g>
+    <path d="M30 246 l14 -3 l-4 10z M262 236 l-14 -1 l5 -9z M96 270 l-10 -6 l12 -2z" fill="${PAL.gold}" stroke="${INK}" stroke-width=".5"/>
+
+    <g class="anim"><g class="shake" style="transform-origin:${VX}px 240px">
+      <!-- antebraço -->
+      <path d="M192 98 C204 84 220 70 236 58 L264 86 C248 102 232 118 216 132 C214 116 206 102 192 98Z" fill="url(#${sk2})" stroke="${INK}" stroke-width="1"/>
+      <path d="M212 104 C224 94 236 84 248 74" stroke="${INK}" stroke-width=".5" opacity=".4" fill="none"/>
+      <!-- costas da mão -->
+      <path d="M188 98 C206 94 218 110 218 132 C218 158 208 176 188 182Z" fill="url(#${sk2})" stroke="${INK}" stroke-width="1"/>
+      ${hatchIn(ch, 206, 120, 220, 182, 2.8, -60, .14)}
+      <path d="M196 112 c6 6 8 14 8 24 M198 150 c4 6 4 12 2 18" stroke="#b8775a" stroke-width=".8" fill="none" opacity=".6"/>
+      <!-- frasco -->
+      <rect x="${VX - 16}" y="66" width="32" height="140" rx="9" fill="url(#${gl})" stroke="${INK}" stroke-width="1.2"/>
+      <g clip-path="url(#${cv})"><rect x="${VX - 16}" y="150" width="32" height="60" fill="url(#${lt})" opacity=".85"/>
+        <path d="M${VX - 16} 150 q8 -4 16 0 t16 0" fill="none" stroke="#fff" stroke-width="1" opacity=".9"/>
+        ${[[VX - 6, 196], [VX + 5, 186], [VX - 2, 178], [VX + 8, 200]].map(([x, y], i) => `<circle class="bub" style="animation-delay:${i * .3}s" cx="${x}" cy="${y}" r="1.6" fill="#fff" fill-opacity=".7" stroke="${INK}" stroke-width=".25"/>`).join('')}</g>
+      <path d="M${VX - 10} 74 V198" stroke="#fff" stroke-width="3" opacity=".85" stroke-linecap="round"/><path d="M${VX + 11} 80 V196" stroke="#8aa4b6" stroke-width="1" opacity=".7"/>
+      <rect x="${VX - 13}" y="50" width="26" height="18" rx="2" fill="${P('brown')}" stroke="${INK}" stroke-width="1"/>
+      ${[54, 58, 62].map(y => `<path d="M${VX - 13} ${y} h26" stroke="${INK}" stroke-width=".35"/>`).join('')}
+      <path d="M${VX - 15} 68 h30" stroke="${INK}" stroke-width="1.4"/>
+      <rect x="${VX - 13}" y="76" width="26" height="24" fill="${PAL.cream}" stroke="${INK}" stroke-width=".6"/>
+      <path d="M${VX - 11} 79 h22 M${VX - 11} 97 h22" stroke="${PAL.red}" stroke-width=".5"/>
+      <text x="${VX}" y="92" text-anchor="middle" style="font:italic 9px var(--fell);fill:${INK}">1C</text>
+      <!-- dedos (do mínimo ao indicador) -->
+      ${F.slice().reverse().map((f, k) => finger(f, 3 - k)).join('')}
+      <!-- polegar por cima do indicador -->
+      <path d="M194 104 C182 96 160 96 142 102 C135 104 133 112 139 115 C152 118 176 116 196 114Z" fill="url(#${sk})" stroke="${INK}" stroke-width="1"/>
+      <path d="M140 104 C136 106 136 112 141 113 C146 113 149 109 147 105 C145 103 142 103 140 104Z" fill="#f6e3d3" stroke="${INK}" stroke-width=".6"/>
+      <path d="M160 101 c-1 4 -1 8 0 12" stroke="${INK}" stroke-width=".55" fill="none" opacity=".7"/>
+      <path d="M146 100 C160 97 176 97 188 101" stroke="#fff" stroke-width="1.4" opacity=".55" fill="none"/>
+      <!-- nós dos dedos -->
+      ${F.map(([y, h, , xk]) => `<path d="M${xk - 2} ${y + 2} c4 ${h * .25} 4 ${h * .7} 0 ${h - 1}" stroke="${INK}" stroke-width=".6" fill="none"/>`).join('')}
       <!-- manga com punho de renda (séc. XVIII) -->
-      <path d="M8 34 C40 56 70 86 92 116 L124 102 C104 76 76 46 44 22Z" fill="${PAL.white}" stroke="${INK}" stroke-width="1.1"/>
-      <path d="M30 40 C56 62 78 86 96 110 M44 30 C66 52 88 76 106 104" stroke="${INK}" stroke-width=".4" opacity=".45" fill="none"/>
-      <path d="M28 38 C54 60 76 86 94 112 L102 108 C84 82 60 54 36 32Z" fill="url(#p-shade)"/>
-      <path d="${[...Array(7)].map((_, i) => { const x = 90 + i * 5, y = 118 - i * 2.4; return `M${x} ${y} a2.6 2.6 0 0 0 5 -2.4`; }).join(' ')}" stroke="${INK}" stroke-width=".8" fill="${PAL.white}"/>
-      <!-- mão fechada segurando o frasco -->
-      <path d="M100 124 C92 140 94 164 110 174 C126 182 160 182 168 170 C178 158 176 136 166 126 C156 118 122 116 100 124Z" fill="${P('skin')}" stroke="${INK}" stroke-width="1.1"/>
-      <path d="M166 128 C174 134 174 144 166 148 M168 148 C176 154 174 164 166 166 M162 166 C166 172 162 178 156 178" fill="none" stroke="${INK}" stroke-width=".8"/>
-      <path d="M108 130 C126 122 150 124 158 134 C152 142 128 144 112 140Z" fill="${P('skin')}" stroke="${INK}" stroke-width=".9"/>
-      <path d="M152 132 c3 2 4 5 3 8" stroke="${INK}" stroke-width=".5" fill="none"/>
-      <path d="M110 154 c14 4 32 4 48 0 M108 166 c14 5 34 5 50 1" stroke="${INK}" stroke-width=".45" opacity=".55" fill="none"/>
+      <path d="M232 60 L294 20 C304 26 314 38 320 50 L262 92Z" fill="${PAL.white}" stroke="${INK}" stroke-width="1.1"/>
+      ${hatchIn(cl, 290, 50, 320, 92, 2.4, -45, .28)}
+      <path d="M248 52 L300 26 M256 66 L308 36 M262 78 L314 44" stroke="${INK}" stroke-width=".45" opacity=".45"/>
+      <path d="${ruff}" stroke="${INK}" stroke-width=".8" fill="${PAL.white}"/>
+      <path d="${lace}" stroke="${INK}" stroke-width=".7" fill="${PAL.white}"/>
+      <path d="M232 60 L262 92" stroke="${PAL.gold}" stroke-width="2"/>
     </g>
-    <path class="motion" d="M108 196 q-14 10 -6 24 M180 196 q14 10 6 24 M98 184 q-18 14 -8 34" fill="none" stroke="${INK}" stroke-width="1"/>
-    <g class="impact"><path d="M120 214 l-10 -4 M124 220 l-12 2 M166 214 l10 -4 M162 220 l12 2" stroke="${PAL.red}" stroke-width="1.2"/></g></g>
+    <path class="motion" d="M118 212 q-14 8 -8 22 M184 212 q14 8 8 22 M108 200 q-18 12 -10 32" fill="none" stroke="${INK}" stroke-width="1"/>
+    <g class="impact"><path d="M128 222 l-10 -4 M130 228 l-12 2 M172 222 l10 -4 M170 228 l12 2" stroke="${PAL.red}" stroke-width="1.2"/></g></g>
     <text x="150" y="318" text-anchor="middle" class="lbl s">Hahnemann batia o frasco num livro de couro</text>
     <!-- 1 em 100 -->
     <text x="402" y="54" text-anchor="middle" class="lbl">1 gota + 99 gotas de água/álcool</text>
@@ -1211,7 +1254,7 @@
     <path d="M362 280 h20 M418 280 h20" stroke="${INK}" stroke-width=".8" marker-end="url(#arr)"/>
     <text x="372" y="274" text-anchor="middle" class="lbl s" style="font-size:8px">×100</text><text x="428" y="274" text-anchor="middle" class="lbl s" style="font-size:8px">×100</text>
     ${['1C', '2C', '3C'].map((t, i) => `<text x="${346 + i * 56}" y="306" text-anchor="middle" class="lbl s">${t}</text>`).join('')}
-    <text x="402" y="322" text-anchor="middle" class="lbl s">e sacode a cada etapa</text>`, 211, 'Gravura: mão sacudindo um frasco contra um livro encadernado em couro; ao lado, 1 gota roxa entre 99 azuis e a sequência de diluições 1C, 2C e 3C');
+    <text x="402" y="322" text-anchor="middle" class="lbl s">e sacode a cada etapa</text>`, 211, 'Gravura: mão com manga de renda do século XVIII segurando um frasco e batendo-o num livro encadernado em couro; ao lado, 1 gota roxa entre 99 azuis e a sequência de diluições 1C, 2C e 3C');
   };
 
   /* ─── 3 · A água tem memória? ─── */
