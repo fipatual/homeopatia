@@ -1149,89 +1149,226 @@
     return `<g class="anim">${bonds}${mols}</g><text x="${w / 2}" y="${h - 22}" text-anchor="middle" class="lbl">as pontes (- - -) se desfazem e refazem em ~1 trilionésimo de segundo</text>`;
   }
 
-  /* ═══════════════ CIÊNCIA ═══════════════ */
+  /* ═══════════════ CIÊNCIA — pranchas em estilo gravura ═══════════════
+     Sem o filtro de lápis: traço nítido, hachuras e mais detalhe.
+     Animações mantidas (sacudir, pontes de hidrogênio, curva, moléculas). */
   const science = {};
-  science.sucussao = () => plate(480, 300, `
-    <g filter="url(#pencil)">
-      <path d="M40 220 L200 196 L240 214 L80 244Z" fill="${P('brown')}" class="ink"/><path d="M80 244 L240 214 L240 228 L80 258Z" fill="${P('ochre')}" class="ink"/>
-      <path d="M40 220 L80 244 L80 258 L40 234Z" fill="${P('red')}" class="ink"/>
-      ${[0, 1, 2].map(i => `<path d="M${90 + i * 4} ${249 - i * 2} L${236} ${220 - i * 2}" class="ink thin" opacity=".4"/>`).join('')}
-      <!-- grade 1:99 -->
-      <g transform="translate(290 70)">${[...Array(100)].map((_, i) => `<circle cx="${(i % 10) * 16}" cy="${Math.floor(i / 10) * 16}" r="5.5" fill="${i === 44 ? P('purple') : P('sky')}" class="ink thin"/>`).join('')}</g>
+  const SW = 520;
+
+  /* ─── 2 · Sacudir faz diferença? ─── */
+  science.sucussao = () => {
+    const cb = uid(), cv = uid();
+    // grade 1:99 em gotas
+    let grid = '';
+    for (let i = 0; i < 100; i++) { const x = 330 + (i % 10) * 16, y = 74 + Math.floor(i / 10) * 15, on = i === 44;
+      grid += `<path d="M${x} ${y - 5.5} c-2.6 4 -4.2 6 -4.2 7.6 a4.2 4.2 0 0 0 8.4 0 c0 -1.6 -1.6 -3.6 -4.2 -7.6z" fill="${on ? '#8a5fb0' : '#bcd9ec'}" stroke="${INK}" stroke-width="${on ? .8 : .4}"/>`; }
+    const mini = (x, y, a) => `<path d="M${x - 3} ${y - 22} h6 v8 c6 3 8 7 8 11 a11 11 0 0 1 -22 0 c0 -4 2 -8 8 -11z" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/><path d="M${x - 10} ${y - 1} a11 9 0 0 0 20 0z" fill="#8a5fb0" opacity="${a}"/>`;
+    return plate(SW, 340, `<defs><clipPath id="${cb}"><path d="M30 246 L196 214 L262 236 L96 270Z"/></clipPath>
+      <clipPath id="${cv}"><rect x="128" y="96" width="30" height="104" rx="8"/></clipPath></defs>
+    <!-- mesa -->
+    <path d="M14 286 H300" class="ink thin"/>${[...Array(6)].map((_, i) => `<path d="M${18 + i * 46} ${292 + (i % 2) * 6} c12 -3 24 3 36 0" class="ink thin" opacity=".35"/>`).join('')}
+    <ellipse cx="146" cy="286" rx="132" ry="5" fill="url(#p-shade)"/>
+    <!-- livro encadernado em couro -->
+    <path d="M96 270 L262 236 L262 252 L96 286Z" fill="#efe3c6" class="ink"/>
+    ${[0, 1, 2, 3, 4].map(i => `<path d="M98 ${273 + i * 2.6} L260 ${239 + i * 2.6}" stroke="${INK}" stroke-width=".35" opacity=".6"/>`).join('')}
+    <path d="M30 246 L96 270 L96 286 L30 262Z" fill="${P('red')}" class="ink"/>
+    ${[0, 1, 2].map(i => `<path d="M${42 + i * 18} ${250 + i * 6.5} v16" stroke="${PAL.gold}" stroke-width="2.2"/>`).join('')}
+    <path d="M30 246 L196 214 L262 236 L96 270Z" fill="#8e3b2c" class="ink"/>
+    ${hatchIn(cb, 146, 242, 262, 270, 2.4, -20, .25)}
+    <path d="M44 246 L192 218 L246 236 L98 264Z" fill="none" stroke="${PAL.gold}" stroke-width="1.2"/>
+    <path d="M52 246 L190 221 L238 236 L100 260Z" fill="none" stroke="${PAL.gold}" stroke-width=".5"/>
+    <g transform="translate(146 242) scale(1 .45) rotate(-14)">${flower(0, 0, 10, 8, 'gold', 'gold')}</g>
+    <path d="M30 246 l12 -2 l-3 9z M262 236 l-12 0 l4 -8z" fill="${PAL.gold}" stroke="${INK}" stroke-width=".5"/>
+    <!-- mão + frasco (sacudindo) -->
+    <g class="anim"><g class="shake" style="transform-origin:143px 230px">
+      <rect x="128" y="96" width="30" height="104" rx="8" fill="${PAL.white}" stroke="${INK}" stroke-width="1.1"/>
+      <g clip-path="url(#${cv})"><rect x="128" y="136" width="30" height="66" fill="#b89ad0" opacity=".65"/>
+        <path d="M128 136 q7 -4 15 0 t15 0" fill="none" stroke="#fff" stroke-width="1"/>
+        ${[[136, 150], [146, 166], [140, 182], [150, 146]].map(([x, y], i) => `<circle class="bub" style="animation-delay:${i * .3}s" cx="${x}" cy="${y}" r="1.8" fill="#fff" fill-opacity=".6" stroke="${INK}" stroke-width=".3"/>`).join('')}</g>
+      <path d="M134 102 V194" stroke="#fff" stroke-width="2.4" opacity=".8"/>
+      <rect x="130" y="82" width="26" height="16" rx="2" fill="${P('brown')}" stroke="${INK}"/><path d="M130 88 h26 M130 93 h26" stroke="${INK}" stroke-width=".4"/>
+      <rect x="132" y="106" width="22" height="18" fill="${PAL.cream}" stroke="${INK}" stroke-width=".6"/><text x="143" y="118" text-anchor="middle" style="font:italic 7px var(--fell);fill:${INK}">1C</text>
+      <!-- manga com punho de renda (séc. XVIII) -->
+      <path d="M8 34 C40 56 70 86 92 116 L124 102 C104 76 76 46 44 22Z" fill="${PAL.white}" stroke="${INK}" stroke-width="1.1"/>
+      <path d="M30 40 C56 62 78 86 96 110 M44 30 C66 52 88 76 106 104" stroke="${INK}" stroke-width=".4" opacity=".45" fill="none"/>
+      <path d="M28 38 C54 60 76 86 94 112 L102 108 C84 82 60 54 36 32Z" fill="url(#p-shade)"/>
+      <path d="${[...Array(7)].map((_, i) => { const x = 90 + i * 5, y = 118 - i * 2.4; return `M${x} ${y} a2.6 2.6 0 0 0 5 -2.4`; }).join(' ')}" stroke="${INK}" stroke-width=".8" fill="${PAL.white}"/>
+      <!-- mão fechada segurando o frasco -->
+      <path d="M100 124 C92 140 94 164 110 174 C126 182 160 182 168 170 C178 158 176 136 166 126 C156 118 122 116 100 124Z" fill="${P('skin')}" stroke="${INK}" stroke-width="1.1"/>
+      <path d="M166 128 C174 134 174 144 166 148 M168 148 C176 154 174 164 166 166 M162 166 C166 172 162 178 156 178" fill="none" stroke="${INK}" stroke-width=".8"/>
+      <path d="M108 130 C126 122 150 124 158 134 C152 142 128 144 112 140Z" fill="${P('skin')}" stroke="${INK}" stroke-width=".9"/>
+      <path d="M152 132 c3 2 4 5 3 8" stroke="${INK}" stroke-width=".5" fill="none"/>
+      <path d="M110 154 c14 4 32 4 48 0 M108 166 c14 5 34 5 50 1" stroke="${INK}" stroke-width=".45" opacity=".55" fill="none"/>
     </g>
-    <g class="anim"><g class="shake" style="transform-origin:140px 200px">
-      <rect x="126" y="96" width="28" height="96" rx="7" fill="${P('white')}" stroke="${INK}"/><rect x="129" y="140" width="22" height="49" rx="4" fill="${PAL.violet}" opacity=".6"/>
-      <rect x="128" y="84" width="24" height="14" fill="${P('brown')}" stroke="${INK}"/>
-      <path d="M118 120 C96 116 92 150 112 158 L156 158 C176 150 172 116 152 120 C150 106 120 106 118 120Z" fill="${P('skin')}" stroke="${INK}"/>
-      <path d="M152 120 c6 4 8 14 0 18 M150 134 c6 4 6 12 0 16" fill="none" stroke="${INK}" stroke-width=".8"/>
-    </g><path class="motion" d="M100 180 q-10 10 -4 22 M180 180 q10 10 4 22 M92 168 q-14 14 -6 30" fill="none" stroke="${INK}" stroke-width="1"/></g>
-    ${lab(60, 230, 30, 280, 'livro de couro', 'start')}
-    <text x="362" y="252" text-anchor="middle" class="lbl">1 gota da substância + 99 de água/álcool</text>
-    <text x="362" y="268" text-anchor="middle" class="lbl em">= 1C (uma “centesimal”)</text>`, 211, 'Mão sacudindo um frasco contra um livro e grade de 1 em 100');
+    <path class="motion" d="M108 196 q-14 10 -6 24 M180 196 q14 10 6 24 M98 184 q-18 14 -8 34" fill="none" stroke="${INK}" stroke-width="1"/>
+    <g class="impact"><path d="M120 214 l-10 -4 M124 220 l-12 2 M166 214 l10 -4 M162 220 l12 2" stroke="${PAL.red}" stroke-width="1.2"/></g></g>
+    <text x="150" y="318" text-anchor="middle" class="lbl s">Hahnemann batia o frasco num livro de couro</text>
+    <!-- 1 em 100 -->
+    <text x="402" y="54" text-anchor="middle" class="lbl">1 gota + 99 gotas de água/álcool</text>
+    ${grid}
+    <text x="402" y="236" text-anchor="middle" class="lbl em">= 1C (uma “centesimal”)</text>
+    ${mini(346, 290, .55)}${mini(402, 290, .25)}${mini(458, 290, .08)}
+    <path d="M362 280 h20 M418 280 h20" stroke="${INK}" stroke-width=".8" marker-end="url(#arr)"/>
+    <text x="372" y="274" text-anchor="middle" class="lbl s" style="font-size:8px">×100</text><text x="428" y="274" text-anchor="middle" class="lbl s" style="font-size:8px">×100</text>
+    ${['1C', '2C', '3C'].map((t, i) => `<text x="${346 + i * 56}" y="306" text-anchor="middle" class="lbl s">${t}</text>`).join('')}
+    <text x="402" y="322" text-anchor="middle" class="lbl s">e sacode a cada etapa</text>`, 211, 'Gravura: mão sacudindo um frasco contra um livro encadernado em couro; ao lado, 1 gota roxa entre 99 azuis e a sequência de diluições 1C, 2C e 3C');
+  };
 
-  science.agua = () => plate(480, 280, waterNet(480, 280), 223, 'Moléculas de água ligadas por pontes de hidrogênio');
+  /* ─── 3 · A água tem memória? ─── */
+  function waterField(cx, cy, R, seed, n = 22) {
+    const r = rng(seed), mols = [];
+    for (let k = 0; k < 400 && mols.length < n; k++) {
+      const a = r() * 6.283, d = Math.sqrt(r()) * (R - 16), x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
+      if (mols.every(m => Math.hypot(m.x - x, m.y - y) > 30)) mols.push({ x, y, t: r() * 6.283 });
+    }
+    const ang = 52.25 * Math.PI / 180, L = 11;
+    mols.forEach(m => { m.h = [[m.x + Math.cos(m.t - ang) * L, m.y + Math.sin(m.t - ang) * L], [m.x + Math.cos(m.t + ang) * L, m.y + Math.sin(m.t + ang) * L]]; });
+    let bonds = '', k = 0;
+    mols.forEach((m, i) => m.h.forEach(([hx, hy]) => {
+      let best = null, bd = 34; mols.forEach((o, j) => { if (j !== i) { const dd = Math.hypot(o.x - hx, o.y - hy); if (dd < bd) { bd = dd; best = o; } } });
+      if (best) bonds += `<path class="hb" style="animation-delay:${((k++ * 7) % 11) * .21}s" d="M${hx.toFixed(1)} ${hy.toFixed(1)} L${best.x.toFixed(1)} ${best.y.toFixed(1)}" stroke="${PAL.blue}" stroke-width="1.2" stroke-dasharray="1.4 2.6" stroke-linecap="round"/>`;
+    }));
+    const atoms = mols.map((m, i) => `<g class="mol" style="animation-delay:${(i * .17).toFixed(2)}s;transform-origin:${m.x.toFixed(1)}px ${m.y.toFixed(1)}px">
+      ${m.h.map(([hx, hy]) => `<path d="M${m.x.toFixed(1)} ${m.y.toFixed(1)} L${hx.toFixed(1)} ${hy.toFixed(1)}" stroke="${INK}" stroke-width="2.2"/>`).join('')}
+      ${m.h.map(([hx, hy]) => sphere(+hx.toFixed(1), +hy.toFixed(1), 4.6, 'white')).join('')}${sphere(+m.x.toFixed(1), +m.y.toFixed(1), 8, 'red')}</g>`).join('');
+    return { svg: bonds + atoms, mols };
+  }
+  science.agua = () => {
+    const cz = uid(), cd = uid();
+    const W = waterField(338, 160, 118, 4);
+    const m0 = W.mols[0];
+    return plate(SW, 330, `<defs><clipPath id="${cz}"><circle cx="338" cy="160" r="116"/></clipPath>${grad(cd, [[0, '#e6f2fa', 1], [1, '#93bfe0', 1]])}</defs>
+    <!-- gota d'água -->
+    <ellipse cx="88" cy="252" rx="44" ry="4" fill="url(#p-shade)"/>
+    <path d="M88 110 C70 150 48 178 48 206 a40 40 0 0 0 80 0 C128 178 106 150 88 110Z" fill="url(#${cd})" stroke="${INK}" stroke-width="1.3"/>
+    <path d="M66 196 C64 180 72 166 80 156" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" opacity=".9"/>
+    <path d="M110 220 C112 210 112 200 108 192" stroke="#4f78b8" stroke-width="1.2" fill="none" opacity=".6"/>
+    ${[0, 1, 2, 3, 4].map(i => `<path d="M${98 + i * 3} ${230 - i * 6} c4 -2 6 -6 6 -10" stroke="${INK}" stroke-width=".4" fill="none" opacity=".4"/>`).join('')}
+    <circle cx="100" cy="200" r="7" fill="none" stroke="${INK}" stroke-width=".8"/>
+    <path d="M104 194 L232 72 M104 206 L240 252" class="lead" stroke-dasharray="3 3"/>
+    <text x="88" y="276" text-anchor="middle" class="lbl s">uma gota tem</text><text x="88" y="287" text-anchor="middle" class="lbl s">~1,7 sextilhão de moléculas</text>
+    <!-- campo ampliado -->
+    <circle cx="338" cy="160" r="122" fill="${PAL.white}" stroke="${INK}" stroke-width="2.4"/>
+    <g clip-path="url(#${cz})"><circle cx="338" cy="160" r="118" fill="#eef6fb"/><g class="anim">${W.svg}</g></g>
+    <circle cx="338" cy="160" r="118" fill="none" stroke="${PAL.gold}" stroke-width="3" opacity=".6"/>
+    <path d="M260 254 A118 118 0 0 0 440 232" fill="none" stroke="${INK}" stroke-width="5" opacity=".08"/>
+    <!-- legendas -->
+    ${labc(m0.x, m0.y, 196, 64, ['molécula de água', 'H₂O · ângulo de 104,5°'], 'lbl s')}
+    <text x="338" y="300" text-anchor="middle" class="lbl s">pontes de hidrogênio (· · ·): se desfazem e refazem</text>
+    <text x="338" y="312" text-anchor="middle" class="lbl s">em cerca de 1 trilionésimo de segundo</text>`, 223, 'Gravura: gota de água e, ampliadas, moléculas de água ligadas por pontes de hidrogênio que piscam');
+  };
 
-  science.duplocego = () => plate(480, 300, `
-    <g filter="url(#pencil)">
-      <!-- dois frascos idênticos -->
-      ${[160, 320].map((x, i) => `<g transform="translate(${x} 0)"><rect x="-16" y="80" width="32" height="76" rx="8" fill="${P('white')}" class="ink"/><rect x="-14" y="68" width="28" height="14" fill="${P('brown')}" class="ink"/>
-        <rect x="-12" y="104" width="24" height="24" fill="${P('cream')}" class="ink thin"/><text y="122" text-anchor="middle" class="lbl em">${i ? 'B' : 'A'}</text>
-        ${[...Array(5)].map((_, k) => `<circle cx="${-8 + (k % 3) * 8}" cy="${140 + Math.floor(k / 3) * 7}" r="3" fill="${P('white')}" class="ink thin"/>`).join('')}</g>`).join('')}
-      <!-- envelope lacrado -->
-      <path d="M200 190 h80 v52 h-80z M200 190 l40 30 l40 -30" fill="${P('cream')}" class="ink"/><circle cx="240" cy="220" r="8" fill="${P('red')}" class="ink"/>
-      <!-- pesquisador vendado e paciente vendado -->
-      ${[60, 420].map((x, i) => `<g transform="translate(${x} 0)"><circle cy="110" r="22" fill="${P('skin')}" class="ink"/><path d="M-24 104 h48 v10 h-48z" fill="${P(i ? 'teal' : 'purple')}" class="ink"/>
-        <path d="M-28 196 C-28 136 28 136 28 196Z" fill="${P(i ? 'yellow' : 'white')}" class="ink"/></g>`).join('')}
-    </g>
-    <text x="240" y="60" text-anchor="middle" class="lbl">qual é o remédio e qual é o placebo?</text>
-    <text x="240" y="262" text-anchor="middle" class="lbl">o segredo só é aberto no fim do estudo</text>
-    <text x="60" y="214" text-anchor="middle" class="lbl s">médico</text><text x="420" y="214" text-anchor="middle" class="lbl s">paciente</text>`, 237, 'Ensaio duplo-cego: frascos A e B e pessoas vendadas');
-
+  /* ─── 4 · A curva natural de um resfriado ─── */
   science.curva = () => {
-    const d = 'M50 230 C80 222 100 120 140 96 C170 80 190 110 220 150 C260 200 320 222 440 228';
-    return plate(480, 290, `
-    <g filter="url(#pencil)">
-      <path d="M50 60 V240 H450" class="ink" marker-end="url(#arr)"/>
-      ${[...Array(10)].map((_, i) => `<path d="M${50 + (i + 1) * 40} 240 v5" class="ink thin"/><text x="${50 + (i + 1) * 40}" y="256" text-anchor="middle" class="lbl s">${i + 1}</text>`).join('')}
-    </g>
-    <path d="${d}" fill="none" stroke="${PAL.red}" stroke-width="3.5" stroke-linecap="round" class="drawline" pathLength="1"/>
-    <g class="pill-mark"><path d="M140 96 V40" class="lead" stroke-dasharray="3 3"/><rect x="128" y="24" width="24" height="12" rx="6" fill="${P('violet')}" stroke="${INK}"/></g>
-    <text x="158" y="34" class="lbl">tomou algo aqui, no pior momento</text>
-    <text x="300" y="160" class="lbl">… e melhorou de qualquer jeito</text>
-    <text x="250" y="276" text-anchor="middle" class="lbl s">dias de resfriado</text>
-    <text x="40" y="54" class="lbl s">sintomas</text>`, 251, 'Curva natural de um resfriado');
+    const d = 'M60 246 C90 238 112 128 152 104 C184 86 206 120 236 160 C276 212 340 236 480 240';
+    const area = d + ' L480 252 L60 252Z';
+    const ca = uid();
+    let grid = ''; for (let i = 1; i <= 10; i++) grid += `M${60 + i * 42} 70 V252 `; for (let j = 0; j < 5; j++) grid += `M60 ${80 + j * 36} H486 `;
+    return plate(SW, 320, `<defs><clipPath id="${ca}"><path d="${area}"/></clipPath></defs>
+    <path d="${grid}" stroke="${PAL.sky}" stroke-width=".5" opacity=".7" fill="none"/>
+    <path d="${area}" fill="#f6d9d3" opacity=".7"/>${hatchIn(ca, 270, 160, 480, 252, 3, -40, .25)}
+    <path d="M60 60 V252 H494" class="ink" stroke-width="1.3" marker-end="url(#arr)"/>
+    <path d="M60 60 l-4 8 h8z" fill="${INK}"/>
+    ${[...Array(10)].map((_, i) => `<path d="M${60 + (i + 1) * 42} 252 v5" class="ink thin"/><text x="${60 + (i + 1) * 42}" y="268" text-anchor="middle" class="lbl s">${i + 1}</text>`).join('')}
+    <path d="${d}" fill="none" stroke="${PAL.red}" stroke-width="3.2" stroke-linecap="round" class="drawline" pathLength="1"/>
+    <g class="anim"><circle class="rider" r="5" fill="${PAL.white}" stroke="${PAL.red}" stroke-width="2" style="offset-path:path('${d}')"/></g>
+    <!-- momento em que tomou algo -->
+    <path d="M152 104 V74" class="lead" stroke-dasharray="3 3"/>
+    <g transform="translate(152 66)"><rect x="-14" y="-7" width="28" height="14" rx="7" fill="${P('violet')}" stroke="${INK}" stroke-width=".8"/><path d="M0 -7 V7" stroke="${INK}" stroke-width=".6"/><path d="M-10 -3 a6 4 0 0 1 6 -3" stroke="#fff" fill="none"/></g>
+    <text x="172" y="70" class="lbl">tomou algo aqui, no pior momento…</text>
+    <text x="300" y="170" class="lbl">… e melhorou de qualquer jeito:</text><text x="300" y="183" class="lbl s">é o caminho natural do resfriado</text>
+    <!-- termômetro no pico e sol no fim -->
+    <g transform="translate(120 128)"><rect x="-3" y="-26" width="6" height="30" rx="3" fill="${PAL.white}" stroke="${INK}" stroke-width=".7"/><rect x="-1.4" y="-16" width="2.8" height="18" fill="${PAL.red}"/><circle cy="6" r="5" fill="${PAL.red}" stroke="${INK}" stroke-width=".7"/>${[-20, -14, -8].map(y => `<path d="M3 ${y} h3" stroke="${INK}" stroke-width=".5"/>`).join('')}</g>
+    <g transform="translate(452 206)"><circle r="10" fill="${P('yellow')}" stroke="${INK}" stroke-width=".8"/>${[...Array(10)].map((_, i) => `<path d="M${(Math.cos(i * .628) * 13).toFixed(1)} ${(Math.sin(i * .628) * 13).toFixed(1)} L${(Math.cos(i * .628) * 18).toFixed(1)} ${(Math.sin(i * .628) * 18).toFixed(1)}" stroke="${PAL.orange}" stroke-width="1.4"/>`).join('')}</g>
+    <text x="270" y="290" text-anchor="middle" class="lbl s">dias de resfriado</text>
+    <text x="56" y="56" text-anchor="end" class="lbl s">sintomas</text>`, 251, 'Gravura: gráfico com a curva natural de um resfriado, que sobe, chega ao pico e desce sozinha; uma pílula marca o pior momento');
+  };
+
+  /* ─── 5 · Ensaio duplo-cego ─── */
+  science.duplocego = () => {
+    const person = (x, coat, band, mirror = 1) => `<g transform="translate(${x} 0) scale(${mirror} 1)">
+      <path d="M-40 250 C-40 196 -26 182 0 178 C26 182 40 196 40 250Z" fill="${P(coat)}" class="ink"/>
+      ${SH('M14 182 C30 188 40 204 40 250 L22 250 C24 214 20 194 14 182Z')}
+      <path d="M-8 178 L0 196 L8 178" fill="${PAL.white}" stroke="${INK}" stroke-width=".8"/>
+      <rect x="-7" y="162" width="14" height="18" fill="${P('skin')}" stroke="${INK}" stroke-width=".8"/>
+      <ellipse cx="0" cy="142" rx="22" ry="26" fill="${P('skin')}" class="ink"/>
+      <path d="M-22 134 C-20 112 20 110 22 132 C14 122 -12 120 -22 134Z" fill="${P('brown')}" stroke="${INK}" stroke-width=".8"/>
+      <path d="M-24 136 C-10 132 10 132 24 136 L24 148 C10 144 -10 144 -24 148Z" fill="${band}" stroke="${INK}" stroke-width=".8"/>
+      <g class="flutter" style="transform-origin:24px 142px"><path d="M24 140 C34 140 40 148 46 152 M24 144 C32 150 34 158 40 164" stroke="${band}" stroke-width="3.4" fill="none" stroke-linecap="round"/></g>
+      <path d="M-4 158 q4 3 8 0" class="ink thin"/><path d="M-22 142 c-4 0 -6 6 -2 8" class="ink thin"/></g>`;
+    const big = (x, l) => `<g transform="translate(${x} 0)">${vial(0, 214, '#e9eef2', '', 1.5)}<text y="190" text-anchor="middle" style="font:15px var(--sc);fill:${INK}">${l}</text>
+      ${[...Array(4)].map((_, k) => `<circle cx="${-5 + (k % 2) * 10}" cy="${206 + Math.floor(k / 2) * 6}" r="2.6" fill="${PAL.white}" stroke="${INK}" stroke-width=".5"/>`).join('')}</g>`;
+    const tiny = (x, y, c) => `<circle cx="${x}" cy="${y - 7}" r="3.4" fill="${P('skin')}" stroke="${INK}" stroke-width=".5"/><path d="M${x - 5} ${y + 6} C${x - 5} ${y - 3} ${x + 5} ${y - 3} ${x + 5} ${y + 6}Z" fill="${c}" stroke="${INK}" stroke-width=".5"/>`;
+    return plate(SW, 340, `
+    <!-- sorteio: cartola -->
+    <ellipse cx="260" cy="110" rx="34" ry="7" fill="${P('gray')}" class="ink"/>
+    <path d="M238 110 L242 70 C252 66 268 66 278 70 L282 110Z" fill="#3a3530" class="ink"/>${SH('M266 68 L278 70 L282 110 L270 110Z')}
+    <path d="M241 98 L281 98 L282 106 L240 106Z" fill="${PAL.red}" stroke="${INK}" stroke-width=".6"/>
+    <g class="anim">${[0, 1, 2, 3].map(i => `<g class="slip ${i % 2 ? 'r' : 'l'}" style="animation-delay:${i * .8}s"><rect x="254" y="58" width="12" height="8" fill="${PAL.white}" stroke="${INK}" stroke-width=".5" transform="rotate(${i % 2 ? 12 : -12} 260 62)"/></g>`).join('')}</g>
+    <text x="260" y="128" text-anchor="middle" class="lbl s">sorteio</text>
+    <path d="M226 84 C196 70 170 70 150 80" fill="none" stroke="${INK}" stroke-width=".8" marker-end="url(#arr)"/><path d="M294 84 C324 70 350 70 370 80" fill="none" stroke="${INK}" stroke-width=".8" marker-end="url(#arr)"/>
+    ${[0, 1, 2, 3, 4].map(i => tiny(108 + i * 13, 92, '#b89ad0')).join('')}${[0, 1, 2, 3, 4].map(i => tiny(360 + i * 13, 92, '#a9cde6')).join('')}
+    <text x="134" y="118" text-anchor="middle" class="lbl s">grupo 1</text><text x="386" y="118" text-anchor="middle" class="lbl s">grupo 2</text>
+    <!-- frascos idênticos -->
+    ${big(220, 'A')}${big(300, 'B')}
+    <text x="260" y="246" text-anchor="middle" class="lbl s">idênticos por fora</text>
+    <!-- envelope lacrado -->
+    <path d="M222 262 h76 v46 h-76z" fill="${P('cream')}" class="ink"/><path d="M222 262 l38 26 l38 -26" fill="none" class="ink"/>
+    <circle cx="260" cy="288" r="8" fill="${PAL.red}" stroke="${INK}" stroke-width=".8"/><path d="M256 288 h8 M260 284 v8" stroke="#7a1f16" stroke-width=".8"/>
+    <g class="anim"><circle class="shine" cx="257" cy="285" r="2" fill="#fff"/></g>
+    <text x="260" y="324" text-anchor="middle" class="lbl s">o código só é aberto no fim do estudo</text>
+    <!-- pesquisador e paciente vendados -->
+    ${person(64, 'white', PAL.purple)}${person(456, 'yellow', PAL.teal, -1)}
+    <g transform="translate(86 214) rotate(8)"><rect x="-12" y="-16" width="24" height="32" fill="${P('ochre')}" stroke="${INK}" stroke-width=".7"/><rect x="-10" y="-12" width="20" height="26" fill="${PAL.white}" stroke="${INK}" stroke-width=".4"/>${[0, 1, 2, 3].map(i => `<path d="M-7 ${-7 + i * 5} h14" stroke="${INK}" stroke-width=".4"/>`).join('')}</g>
+    <text x="64" y="268" text-anchor="middle" class="lbl s">pesquisador</text><text x="64" y="279" text-anchor="middle" class="lbl s">não sabe</text>
+    <text x="456" y="268" text-anchor="middle" class="lbl s">paciente</text><text x="456" y="279" text-anchor="middle" class="lbl s">não sabe</text>
+    <text x="260" y="44" text-anchor="middle" class="lbl">qual é o remédio e qual é o placebo?</text>`, 237, 'Gravura de um ensaio duplo-cego: sorteio numa cartola divide os pacientes em dois grupos; dois frascos idênticos A e B; envelope lacrado com o código; pesquisador e paciente com os olhos vendados');
   };
 
   /* Frasco da escada: pontos = moléculas esperadas */
   science.flask = (molsLog10) => {
-    const r = rng(9); let dots = '';
+    const r = rng(9), cf = uid(), gl = uid(); let dots = '';
     const n = molsLog10 >= 2 ? 60 : molsLog10 >= 1 ? 20 : molsLog10 >= 0 ? Math.max(1, Math.round(Math.pow(10, molsLog10))) : 0;
-    for (let i = 0; i < n; i++) { const a = r() * 6.28, rr = Math.sqrt(r()) * 52; dots += `<circle cx="${110 + Math.cos(a) * rr}" cy="${188 + Math.sin(a) * rr * .8}" r="4" fill="${PAL.purple}" stroke="${INK}" stroke-width=".6"/>`; }
+    for (let i = 0; i < n; i++) { const a = r() * 6.28, rr = Math.sqrt(r()) * 50; const x = 110 + Math.cos(a) * rr, y = 196 + Math.sin(a) * rr * .72;
+      dots += `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#7d55a3" stroke="${INK}" stroke-width=".5"/><circle cx="${(x - 1.3).toFixed(1)}" cy="${(y - 1.4).toFixed(1)}" r="1.2" fill="#fff" opacity=".8"/></g>`; }
     let water = '';
-    for (let i = 0; i < 46; i++) { const a = r() * 6.28, rr = Math.sqrt(r()) * 56; water += `<circle cx="${110 + Math.cos(a) * rr}" cy="${188 + Math.sin(a) * rr * .8}" r="2.2" fill="${PAL.sky}" opacity=".7"/>`; }
-    return `<svg viewBox="0 0 220 270" class="art flask" role="img" aria-label="Frasco em corte com moléculas"><g filter="url(#pencil)">
-      <path d="M90 30 h40 v50 c40 16 56 50 56 98 a76 76 0 0 1 -152 0 c0 -48 16 -82 56 -98z" fill="${P('white')}" class="ink" stroke-width="1.6"/>
-      <path d="M38 160 C60 150 160 150 182 160 C186 220 150 250 110 250 C70 250 34 220 38 160Z" fill="${P('sky')}" opacity=".6"/>
-      <rect x="86" y="16" width="48" height="16" rx="3" fill="${P('brown')}" class="ink"/></g>
-      ${water}<g class="mols">${dots}</g></svg>`;
+    for (let i = 0; i < 70; i++) { const a = r() * 6.28, rr = Math.sqrt(r()) * 58, x = 110 + Math.cos(a) * rr, y = 198 + Math.sin(a) * rr * .72, t = r() * 6.28;
+      water += `<g opacity=".55"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.9" fill="#d45a4c"/><circle cx="${(x + Math.cos(t) * 2.4).toFixed(1)}" cy="${(y + Math.sin(t) * 2.4).toFixed(1)}" r="1.1" fill="#fff" stroke="#9fb4c4" stroke-width=".3"/></g>`; }
+    const body = 'M90 30 h40 v50 c40 16 56 50 56 98 a76 76 0 0 1 -152 0 c0 -48 16 -82 56 -98z';
+    return `<svg viewBox="0 0 220 270" class="art flask" role="img" aria-label="Frasco em corte com moléculas">
+      <defs><clipPath id="${cf}"><path d="${body}"/></clipPath>${grad(gl, [[0, '#dcecf6', .9], [1, '#9cc6e2', .95]])}</defs>
+      <ellipse cx="110" cy="262" rx="70" ry="4" fill="url(#p-shade)"/>
+      <path d="${body}" fill="${PAL.white}" stroke="${INK}" stroke-width="1.6"/>
+      <g clip-path="url(#${cf})"><path d="M20 160 C60 150 160 150 200 160 V270 H20Z" fill="url(#${gl})"/>
+        <path d="M20 160 C60 150 160 150 200 160" fill="none" stroke="#5f8fb8" stroke-width="1"/>
+        ${hatchIn(cf, 150, 160, 190, 260, 3, -40, .18)}</g>
+      ${water}<g class="mols">${dots}</g>
+      <path d="M86 84 C54 102 44 134 44 170" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>
+      <path d="M100 36 V78" stroke="#fff" stroke-width="3" opacity=".8"/>
+      <path d="M93 30 h34" stroke="${INK}" stroke-width="1.2"/>
+      <rect x="84" y="14" width="52" height="18" rx="3" fill="${P('brown')}" stroke="${INK}" stroke-width="1.1"/>
+      <path d="M84 20 h52 M84 26 h52" stroke="${INK}" stroke-width=".4"/>
+      ${[0, 1, 2, 3, 4].map(i => `<path d="M${168 - i} ${130 + i * 22} h8" stroke="${INK}" stroke-width=".7"/>`).join('')}</svg>`;
   };
-  /* ícones de comparação para a escada */
+
+  /* ícones de comparação para a escada (gravura, sem filtro) */
   science.cmpIcon = (k) => {
+    const g = uid();
     const I = {
-      gota: `<path d="M60 20 c-14 26 -24 38 -24 50 a24 24 0 0 0 48 0 c0 -12 -10 -24 -24 -50z" fill="${P('violet')}" class="ink"/>`,
-      colher: `<ellipse cx="44" cy="62" rx="26" ry="18" fill="${P('gray')}" class="ink"/><ellipse cx="44" cy="60" rx="18" ry="11" fill="${P('sky')}" class="ink thin"/><path d="M68 56 L112 36" class="ink" stroke-width="6"/>`,
-      garrafa: `<path d="M50 14 h20 v14 c14 8 16 18 16 30 v40 a8 8 0 0 1 -8 8 h-36 a8 8 0 0 1 -8 -8 v-40 c0 -12 2 -22 16 -30z" fill="${P('sky')}" class="ink"/><rect x="50" y="8" width="20" height="8" fill="${P('blue')}" class="ink"/>`,
-      balde: `<path d="M26 34 h68 l-8 70 h-52z" fill="${P('teal')}" class="ink"/><ellipse cx="60" cy="34" rx="34" ry="8" fill="${P('sky')}" class="ink"/><path d="M28 34 C30 0 90 0 92 34" class="ink"/>`,
-      caixa: `<path d="M20 40 h80 v56 h-80z" fill="${P('blue')}" class="ink"/><ellipse cx="60" cy="40" rx="40" ry="10" fill="${P('sky')}" class="ink"/><path d="M30 96 v16 M90 96 v16" class="ink" stroke-width="3"/>`,
-      piscina: `<path d="M10 50 L90 40 L112 70 L32 82Z" fill="${P('sky')}" class="ink"/>${[0, 1, 2, 3].map(i => `<path d="M${16 + i * 6} ${58 + i * 6} L${96 + i * 6} ${48 + i * 6}" class="ink thin" stroke-dasharray="3 2"/>`).join('')}<path d="M32 82 v10 L112 80 v-10" fill="${P('white')}" class="ink"/>`,
-      lago: `<path d="M10 70 C20 50 50 54 70 50 C100 46 112 66 104 80 C96 96 40 98 20 90 C8 84 6 76 10 70Z" fill="${P('blue')}" class="ink"/><path d="M14 50 l10 -24 l10 24 M84 44 l12 -30 l12 30" fill="${P('green')}" class="ink"/>`,
-      oceano: `<path d="M0 60 q15 -12 30 0 t30 0 t30 0 t30 0 V110 H0z" fill="${P('blue')}" class="ink"/><path d="M0 80 q15 -10 30 0 t30 0 t30 0 t30 0" class="ink thin"/><path d="M80 30 h30 l-6 14 h-24z M92 30 V8 l12 16 h-12" fill="${P('white')}" class="ink thin"/>`,
-      terra: `<circle cx="60" cy="60" r="44" fill="${P('blue')}" class="ink"/><path d="M34 34 c10 -6 22 0 18 12 c-4 10 8 14 4 24 c-4 8 -16 4 -22 -4 c-6 -10 -8 -24 0 -32z M72 70 c8 -6 20 0 18 10 c-2 10 -14 14 -20 6 z" fill="${P('green')}" class="ink thin"/>`,
-      sol: `<circle cx="60" cy="60" r="34" fill="${P('yellow')}" class="ink"/>${[...Array(12)].map((_, i) => `<path d="M${60 + Math.cos(i * .52) * 40} ${60 + Math.sin(i * .52) * 40} L${60 + Math.cos(i * .52) * 54} ${60 + Math.sin(i * .52) * 54}" stroke="${PAL.orange}" stroke-width="3"/>`).join('')}`,
-      sistema: `<circle cx="60" cy="60" r="8" fill="${P('yellow')}" class="ink"/>${[18, 28, 40, 54].map((r, i) => `<ellipse cx="60" cy="60" rx="${r}" ry="${r * .45}" class="ink thin" fill="none"/><circle cx="${60 + r}" cy="60" r="${3 + i}" fill="${P(['red', 'blue', 'orange', 'ochre'][i])}" class="ink thin"/>`).join('')}`,
-      estrelas: `${[...Array(16)].map((_, i) => { const r = rng(i + 40); const x = 10 + r() * 100, y = 10 + r() * 100, s = 2 + r() * 5; return `<path d="M${x} ${y - s} L${x + s * .3} ${y - s * .3} L${x + s} ${y} L${x + s * .3} ${y + s * .3} L${x} ${y + s} L${x - s * .3} ${y + s * .3} L${x - s} ${y} L${x - s * .3} ${y - s * .3}Z" fill="${PAL.yellow}" stroke="${INK}" stroke-width=".5"/>`; }).join('')}<circle cx="60" cy="60" r="40" fill="none" stroke="${PAL.sky}" stroke-width="2" stroke-dasharray="4 4"/>`
+      gota: `<path d="M60 18 c-14 26 -24 38 -24 52 a24 24 0 0 0 48 0 c0 -14 -10 -26 -24 -52z" fill="#b89ad0" class="ink"/><path d="M48 72 c0 -10 4 -18 8 -24" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>${SH('M70 56 c6 10 10 18 10 24 a20 20 0 0 1 -14 14 c8 -10 8 -24 4 -38z')}`,
+      colher: `<path d="M64 58 L112 34" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><path d="M64 58 L112 34" stroke="#c9c4ba" stroke-width="5" stroke-linecap="round"/><ellipse cx="42" cy="64" rx="28" ry="19" fill="#c9c4ba" class="ink"/><ellipse cx="42" cy="62" rx="20" ry="12" fill="#bcd9ec" stroke="${INK}" stroke-width=".7"/><path d="M28 58 c4 -4 10 -5 14 -4" stroke="#fff" stroke-width="2" fill="none"/>${SH('M42 83 A28 19 0 0 0 70 64 A24 16 0 0 1 42 83Z')}`,
+      garrafa: `<path d="M50 16 h20 v14 c14 8 16 18 16 30 v42 a8 8 0 0 1 -8 8 h-36 a8 8 0 0 1 -8 -8 v-42 c0 -12 2 -22 16 -30z" fill="#cfe5f2" class="ink"/><path d="M36 64 h48 v38 a8 8 0 0 1 -8 8 h-32 a8 8 0 0 1 -8 -8z" fill="#93bfe0" opacity=".7"/><rect x="49" y="8" width="22" height="9" rx="2" fill="${P('blue')}" class="ink"/><path d="M42 58 V100" stroke="#fff" stroke-width="3" opacity=".8"/>${[0, 1, 2].map(i => `<path d="M36 ${74 + i * 10} h48" stroke="${INK}" stroke-width=".4" opacity=".4"/>`).join('')}`,
+      balde: `<path d="M28 0 M30 36 C32 4 88 4 90 36" stroke="${INK}" stroke-width="1.6" fill="none"/><path d="M24 36 h72 l-8 70 h-56z" fill="${P('teal')}" class="ink"/>${SH('M78 36 h18 l-8 70 h-14z')}${[50, 74].map(y => `<path d="M${24 + (y - 36) * .12} ${y} h${72 - (y - 36) * .24}" stroke="${INK}" stroke-width="1"/>`).join('')}<ellipse cx="60" cy="36" rx="36" ry="8" fill="#93bfe0" class="ink"/>`,
+      caixa: `<path d="M18 40 h84 v58 h-84z" fill="#e8e3d6" class="ink"/>${SH('M84 40 h18 v58 h-18z')}<ellipse cx="60" cy="40" rx="42" ry="10" fill="#d6d0c2" class="ink"/><ellipse cx="60" cy="38" rx="14" ry="3.6" fill="#93bfe0" stroke="${INK}" stroke-width=".6"/>${[54, 70, 86].map(y => `<path d="M18 ${y} h84" stroke="${INK}" stroke-width=".6"/>`).join('')}<path d="M26 98 v16 M94 98 v16 M60 98 v16" stroke="${INK}" stroke-width="3"/>`,
+      piscina: `<path d="M8 52 L92 40 L114 72 L30 86Z" fill="#93bfe0" class="ink"/>${[0, 1, 2, 3].map(i => `<path d="M${14 + i * 6} ${58 + i * 7} L${98 + i * 5} ${46 + i * 7}" stroke="#fff" stroke-width="1.4" stroke-dasharray="4 3"/>`).join('')}<path d="M30 86 V96 L114 82 V72" fill="#e8e3d6" class="ink"/><path d="M8 52 V62 L30 96" fill="none" class="ink"/><path d="M92 40 v-14 M100 38 v-14 M92 30 h8" stroke="${INK}" stroke-width="1.2"/>`,
+      lago: `<path d="M14 46 l12 -28 l12 28z M80 44 l14 -32 l14 32z M54 46 l9 -18 l9 18z" fill="${P('green')}" class="ink"/><path d="M8 72 C18 52 50 54 70 50 C102 46 114 66 106 82 C98 98 40 100 20 92 C6 86 4 78 8 72Z" fill="#4f78b8" class="ink"/>${[0, 1, 2].map(i => `<path d="M${28 + i * 14} ${68 + i * 8} h${30 - i * 4}" stroke="#fff" stroke-width="1" opacity=".8"/>`).join('')}`,
+      oceano: `<path d="M0 58 q15 -10 30 0 t30 0 t30 0 t30 0 V112 H0z" fill="#3d62a8" class="ink"/>${[74, 90].map(y => `<path d="M0 ${y} q15 -8 30 0 t30 0 t30 0 t30 0" stroke="#fff" stroke-width="1" fill="none" opacity=".6"/>`).join('')}<path d="M76 40 h34 l-6 12 h-24z" fill="${P('brown')}" class="ink"/><path d="M92 40 V10 L108 34 H92" fill="${PAL.white}" class="ink"/>`,
+      terra: `<defs><clipPath id="${g}"><circle cx="60" cy="60" r="44"/></clipPath></defs><circle cx="60" cy="60" r="44" fill="#4f78b8" class="ink"/><g clip-path="url(#${g})"><path d="M30 30 c10 -6 22 0 18 12 c-4 10 8 14 4 24 c-4 8 -16 4 -22 -4 c-6 -10 -8 -24 0 -32z M70 68 c8 -6 22 0 20 12 c-2 10 -16 14 -22 6z M74 22 c8 -2 16 4 12 10 c-4 4 -12 2 -12 -10z" fill="${P('green')}" stroke="${INK}" stroke-width=".7"/><path d="M60 16 A44 44 0 0 1 60 104 A40 44 0 0 0 60 16Z" fill="url(#p-cross)"/></g><path d="M34 36 a30 30 0 0 1 16 -12" stroke="#fff" stroke-width="2.4" fill="none" opacity=".7"/>`,
+      sol: `${[...Array(16)].map((_, i) => { const a = i * .3927; return `<path d="M${(60 + Math.cos(a) * 38).toFixed(1)} ${(60 + Math.sin(a) * 38).toFixed(1)} L${(60 + Math.cos(a) * (i % 2 ? 48 : 56)).toFixed(1)} ${(60 + Math.sin(a) * (i % 2 ? 48 : 56)).toFixed(1)}" stroke="${PAL.orange}" stroke-width="${i % 2 ? 1.6 : 2.6}" stroke-linecap="round"/>`; }).join('')}<circle cx="60" cy="60" r="32" fill="${P('yellow')}" class="ink"/>${SH('M76 32 A32 32 0 0 1 60 92 A28 30 0 0 0 76 32Z')}`,
+      sistema: `<circle cx="60" cy="60" r="8" fill="${P('yellow')}" class="ink"/>${[18, 28, 40, 54].map((r, i) => `<ellipse cx="60" cy="60" rx="${r}" ry="${r * .42}" stroke="${INK}" stroke-width=".6" fill="none"/><circle cx="${(60 + r * Math.cos(i * 1.7)).toFixed(1)}" cy="${(60 + r * .42 * Math.sin(i * 1.7)).toFixed(1)}" r="${3 + i * .8}" fill="${['#c4473a', '#4f78b8', '#e07b39', '#c98a35'][i]}" stroke="${INK}" stroke-width=".6"/>`).join('')}<ellipse cx="60" cy="60" rx="58" ry="26" stroke="${INK}" stroke-width=".4" fill="none" stroke-dasharray="2 3"/>`,
+      estrelas: `<circle cx="60" cy="60" r="52" fill="#1f2a44" class="ink"/>${[...Array(22)].map((_, i) => { const r = rng(i + 40); const a = r() * 6.28, d = Math.sqrt(r()) * 46, x = 60 + Math.cos(a) * d, y = 60 + Math.sin(a) * d, s = 1.4 + r() * 4; return `<path d="M${x.toFixed(1)} ${(y - s).toFixed(1)} L${(x + s * .25).toFixed(1)} ${(y - s * .25).toFixed(1)} L${(x + s).toFixed(1)} ${y.toFixed(1)} L${(x + s * .25).toFixed(1)} ${(y + s * .25).toFixed(1)} L${x.toFixed(1)} ${(y + s).toFixed(1)} L${(x - s * .25).toFixed(1)} ${(y + s * .25).toFixed(1)} L${(x - s).toFixed(1)} ${y.toFixed(1)} L${(x - s * .25).toFixed(1)} ${(y - s * .25).toFixed(1)}Z" fill="${PAL.yellow}"/>`; }).join('')}<circle cx="60" cy="60" r="30" fill="none" stroke="#93bfe0" stroke-width="1.4" stroke-dasharray="3 3"/>`
     };
-    return `<svg viewBox="0 0 120 120" class="art cmp"><g filter="url(#pencil)">${I[k] || I.gota}</g></svg>`;
+    return `<svg viewBox="0 0 120 120" class="art cmp">${I[k] || I.gota}</svg>`;
   };
 
   /* Planta para as bordas da linha do tempo (ramos, folhas, flores) */

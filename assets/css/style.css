@@ -344,3 +344,17 @@ path.ink:not([fill]),.ink[fill=none]{fill:none}
 .spinslow{transform-box:view-box;animation:spin 12s linear infinite}
 .flowdash{animation:flowd 1.2s linear infinite}
 @keyframes flowd{to{stroke-dashoffset:-12}}
+
+/* ── pranchas da Ciência (estilo gravura) ── */
+.impact{animation:impact 1s cubic-bezier(.5,0,.5,1) infinite;opacity:0}
+@keyframes impact{0%,40%{opacity:0}45%,58%{opacity:1}65%,100%{opacity:0}}
+.flutter{transform-box:view-box;animation:flutter 1.6s ease-in-out infinite alternate}
+@keyframes flutter{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
+.slip{transform-box:fill-box;animation:slipl 3.2s ease-out infinite;opacity:0}
+.slip.r{animation-name:slipr}
+@keyframes slipl{0%{transform:translate(0,10px);opacity:0}15%{opacity:1}100%{transform:translate(-104px,24px) rotate(-200deg);opacity:0}}
+@keyframes slipr{0%{transform:translate(0,10px);opacity:0}15%{opacity:1}100%{transform:translate(104px,24px) rotate(200deg);opacity:0}}
+.rider{display:none}
+@supports (offset-path: path('M0 0 L1 1')){.rider{display:inline;offset-rotate:0deg;animation:ride 6s ease-in-out infinite}}
+@keyframes ride{0%{offset-distance:0%;opacity:0}8%{opacity:1}90%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.flask .mols g{transform-box:fill-box;transform-origin:center;animation:pop .45s both}
